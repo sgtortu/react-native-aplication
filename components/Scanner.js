@@ -19,6 +19,7 @@ export default function Scanner({ navigation }) {
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
 
+    console.log('data-> ', data)
     // Para separar al string que recibo
     let elements = data.split("@");
 

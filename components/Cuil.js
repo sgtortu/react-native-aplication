@@ -18,4 +18,6 @@ const cuil = (sexo, dni) = () => {
     return fijosYvariablesMult;
 }
 
-cuil('M',42400448);
+//cuil('M',42400448);
+
+export default cuil;

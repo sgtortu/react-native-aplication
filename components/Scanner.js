@@ -9,10 +9,12 @@ export default function Scanner({ navigation }) {
   // Cuil
   const getCUIT = (gender, dni) => {
         
+    console.log('antes: ',dni);
     dni = String(dni);
+    console.log('despues: ',dni.length);
 
     if (!dni || dni.length !== 8) {
-      throw new Error('The DNI number must contain 8 numbers');
+       return alert('Algo anduvo mal');
     }
   
     let genderNumber = gender === 'M' ? 20 : 27;
@@ -65,22 +67,21 @@ export default function Scanner({ navigation }) {
     let dni,apellido,nombre,fnac,sexo = '';
     if (data[0] == '@') {
       // Dni mas antiguo
-      dni = elements[1]
-      apellido = elements[4]
-      nombre = elements[5]
-      fnac = elements[7]
-      sexo = elements[8]
+      dni = elements[1].trim();
+      apellido = elements[4].trim();
+      nombre = elements[5].trim(); 
+      fnac = elements[7].trim();
+      sexo = elements[8].trim();
     }else{
       // Dni mas reciente
-      dni = elements[4]
-      apellido = elements[1]
-      nombre = elements[2]
-      fnac = elements[6]
-      sexo = elements[3]
+      dni = elements[4].trim();
+      apellido = elements[1].trim();
+      nombre = elements[2].trim(); 
+      fnac = elements[6].trim();
+      sexo = elements[3].trim();
     }
-    
     // Discriminar a los que no sean pdf417. Un QR por ejemplo
-    if (type == 2048) { 
+    if (type == 2048) {  
       let cuilScan = getCUIT(sexo,dni);
       // Comparar que el DNI del escaneo sea un AFILIADO ACTIVO 
       fetch(`http://192.168.0.9:3000/usuarios/${dni}`).then((response) => {

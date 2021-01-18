@@ -1,6 +1,8 @@
  
 import React, { Component, useState } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, TouchableHighlight } from 'react-native';  
+import config from "../config";
+
 export default class Register extends Component {
   
     constructor({ route, navigation }){
@@ -138,7 +140,7 @@ export default class Register extends Component {
           "con_usu": this.state.password, 
           "id_tusu": 6
         }
-        fetch(`http://192.168.0.9:3000/usuario`, {
+        fetch(`${config.API_URL}usuario`, {
           method: 'POST', // or 'PUT'
           headers: {
             'Content-Type': 'application/json',
@@ -161,7 +163,7 @@ export default class Register extends Component {
           "cuil":  this.state.cuilScan,
           "celular":  this.state.cellphone 
         } 
-        fetch(`http://192.168.0.9:3000/persona/${this.state.dniScan}`, {
+        fetch(`${config.API_URL}persona/${this.state.dniScan}`, {
           method: 'PUT', // or 'PUT'
           headers: {
             'Content-Type': 'application/json',
@@ -174,7 +176,7 @@ export default class Register extends Component {
         })     
 
         // Get persona
-        fetch(`http://192.168.0.9:3000/persona/${this.state.dniScan}`).then((response) => {
+        fetch(`${config.API_URL}persona/${this.state.dniScan}`).then((response) => {
           if (response.ok) {
             return response.json();
           } else {
@@ -187,7 +189,7 @@ export default class Register extends Component {
           
           
           // GET usuario (creado recien)
-          fetch(`http://192.168.0.9:3000/lastusuario/${this.state.username}`).then((response) => {
+          fetch(`${config.API_URL}lastusuario/${this.state.username}`).then((response) => {
             if (response.ok) {
               return response.json();
             } else {
@@ -202,7 +204,7 @@ export default class Register extends Component {
             // PUT afiliado
             console.log('idusuario-> ',this.state.idusuario)
             console.log('idpersona-> ',this.state.idpersona)
-            fetch(`http://192.168.0.9:3000/afiliado/${this.state.idpersona}`, {
+            fetch(`${config.API_URL}afiliado/${this.state.idpersona}`, {
               method: 'PUT', // or 'PUT'
               headers: {
                 'Content-Type': 'application/json',

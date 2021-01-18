@@ -3,15 +3,16 @@
 import React,  { useState, useEffect }  from 'react';
 import { Button, Text, View ,StyleSheet} from 'react-native'; 
 import { BarCodeScanner } from 'expo-barcode-scanner'; 
+import config from "../config";
 
 export default function Scanner({ navigation }) {  
 
   // Cuil
   const getCUIT = (gender, dni) => {
         
-    console.log('antes: ',dni);
+    console.log('dni: ',dni);
     dni = String(dni);
-    console.log('despues: ',dni.length);
+    console.log('dni largo: ',dni.length);
 
     if (!dni || dni.length !== 8) {
        return alert('Algo anduvo mal');
@@ -64,6 +65,7 @@ export default function Scanner({ navigation }) {
  
     // Para separar al string que recibo
     let elements = data.split("@");
+    console.log('elements: ', elements)
     let dni,apellido,nombre,fnac,sexo = '';
     if (data[0] == '@') {
       // Dni mas antiguo
@@ -84,7 +86,7 @@ export default function Scanner({ navigation }) {
     if (type == 2048) {  
       let cuilScan = getCUIT(sexo,dni);
       // Comparar que el DNI del escaneo sea un AFILIADO ACTIVO 
-      fetch(`http://192.168.0.9:3000/usuarios/${dni}`).then((response) => {
+      fetch(`${config.API_URL}usuarios/${dni}`).then((response) => {
         if (response.ok) {
           return response.json();
         } else {
@@ -99,6 +101,7 @@ export default function Scanner({ navigation }) {
       .catch((error) => {
         console.log(error)
         alert('Inhabilitado.') 
+        //  navigation.navigate('Inicio')
         // Redireccionar a Inicio
       });
           

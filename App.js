@@ -9,11 +9,13 @@ import Scanner from './components/Scanner';
 import Register from './components/Register';
 import Login from './components/Login';
 import Home from './components/Home';
+import Credencial from './components/Credencial';
  
  
 const Stack = createStackNavigator();
 
 export default function App() { 
+
  
     return (
       <NavigationContainer>
@@ -23,6 +25,7 @@ export default function App() {
           <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="Ingresar" component={Login} />
           <Stack.Screen name="Inicio" component={Home} />
+          <Stack.Screen name="Credencial" component={Credencial} />
         </Stack.Navigator>
       </NavigationContainer>
     )

@@ -1,59 +1,48 @@
  
 import React, { Component, useState } from 'react';
 import { Button,StyleSheet, Text, View, TextInput, ScrollView, TouchableHighlight } from 'react-native';  
-import config from "../config";
+import config from "../config"; 
 
 
-export default class Login  extends Component{ 
+
+export default function Login({ navigation }) { 
+
+    const [dataUser, setDataUser] = useState({  
+        username: '',
+        password: '',
+    });
+    const [validateUsername, setValidateUsername] = useState(true);
+    const [validatePassword, setValidatePassword] = useState(true);
+    const [validateAll, setValidateAll] = useState(false);
+ 
   
-  constructor(){
-    super() 
-    
-    this.state = {
-      
-      username: '',
-      password: '',  
-      
-      validateUsername: true,
-      validatePassword: true, 
-      validateAll: false,
-      
-    }
-  }
-  changeUsername(username){
-    this.setState({username})
-  }
-  changePassword(password){
-    this.setState({password})
-  }
-  
-  
-  validate(username, password){
+  let validate = (usernameV, passwordV) => {
      
     // USERNAME         
-    fetch(`${config.API_URL}lastusuario/${username}`).then((response) => {
+    fetch(`${config.API_URL}lastusuario/${usernameV}`).then((response) => {
       if (response.ok) {
         return response.json();
       } else {
         //throw new Error('Algo anduvo mal.');
-        //alert('Algo anduvo mal.');
-        this.setState({validatePassword: false})
-        this.setState({validateUsername: false})
+        //alert('Algo anduvo mal.'); 
+
+        setValidatePassword(false)
+        setValidateUsername(false)
         
       }
     })
     .then((responseJson) => { 
       
       console.log('ok : ', responseJson.con_usu) 
-      if (responseJson.nom_usu !== username) {
-        this.setState({validateUsername: false})
+      if (responseJson.nom_usu !== usernameV) {
+        setValidateUsername(false)
       } else {
-        this.setState({validateUsername: true})
+        setValidateUsername(true)
       }
-      if (responseJson.con_usu !== password) {
-        this.setState({validatePassword: false})
+      if (responseJson.con_usu !== passwordV) {
+        setValidatePassword(false)
       } else {
-        this.setState({validatePassword: true})
+        setValidatePassword(true)
       }
     })
     .catch((error) => {
@@ -63,29 +52,34 @@ export default class Login  extends Component{
     // PASSWORD
     
     // TODO
-    if (this.state.username,this.state.password){
-      this.setState({validateAll: true})
+    if ( usernameV, passwordV){
+      setValidateAll(true)
     }else{
-      this.setState({validateAll: false})
+      setValidateAll(false)
     }
     
   }
   
-  clickSend(){
+  let clickSend = () => {
     // Validaciones
-    this.validate(this.state.username,this.state.password)
+    validate(username, password)
     
-    if (this.state.validateAll) {
+    if ( validateAll) {
       alert('okey! (Se inicia sesion).')
       // Se inicia sesion
+      navigation.navigate('Credencial')
     }else{
       //alert('Hay campos incorrectos.')
     }
     
     
   }
-  
-  render () {
+
+  const { 
+    username,
+    password, 
+  } = dataUser;
+ 
     
     return (
       <View style={styles.container}>  
@@ -96,36 +90,59 @@ export default class Login  extends Component{
         style={styles.inputStyle}
         placeholder="Nombre de usuario"
         maxLength={20}
-        value={this.state.username}
+        value={ username}
         name="username"
-        onChangeText={(username) => this.changeUsername(username)}
+        onChangeText={       (username) =>
+          setDataUser({
+            ...dataUser,
+            'username': username,
+          })
+        }
+        //onChangeText={(username) => this.changeUsername(username)}
       />      
-      { this.state.validateUsername ? null : <Text style={styles.msgError}>Usuario no registrado</Text>}
+      {  validateUsername ? null : <Text style={styles.msgError}>Usuario no registrado</Text>}
       
       <TextInput
         style={styles.inputStyle}
         placeholder="Contraseña"
-        value={this.state.password}
+        value={ password}
         maxLength={15}
         secureTextEntry={true}
         name="password"
-        onChangeText={(password) => this.changePassword(password)}
+        onChangeText={       (password) =>
+          setDataUser({
+            ...dataUser,
+            'password': password,
+          })
+        }
+        
+        //onChangeText={(password) => this.changePassword(password)}
       />
-      { this.state.validatePassword ? null : <Text style={styles.msgError}>Contraseña inválida</Text>}
+      {  validatePassword ? null : <Text style={styles.msgError}>Contraseña inválida</Text>}
  
       <TouchableHighlight 
         style={styles.button}
         color="#3740FE"
-        onPress={() => { this.clickSend() }} >
+        onPress={() => { clickSend() }} >
         <Text>Ingresar</Text>        
         
       </TouchableHighlight>
+
+      <Text>¿Aún no se ha registrado?</Text>
+      <Button
+          style={styles.button}
+          color="#3740FE"  
+          testID="logoutButton"
+          // Escanear = PreRegister.js
+          onPress={() => navigation.navigate('Escanear')}
+          title="Registrarse"
+      />
           
  
     </ScrollView>
     
   </View>
-  )};
+  ) 
 }
 
 const styles = StyleSheet.create({

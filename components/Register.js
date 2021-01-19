@@ -3,243 +3,265 @@ import React, { Component, useState } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, TouchableHighlight } from 'react-native';  
 import config from "../config";
 
-export default class Register extends Component {
+export default function Register ({ route, navigation }) { 
+        // Desde Scanner.js vienen las siguientes variables: 
+        const { sexoScan, fnacScan, nombreScan, apellidoScan, dniScan, cuilScan } = route.params;
   
-    constructor({ route, navigation }){
-      super()
-
-      // Desde Scanner.js vienen las siguientes variables: 
-      const { sexoScan, fnacScan, nombreScan, apellidoScan, dniScan, cuilScan } = route.params;
-
-      this.state = {
-
-        email: '',
-        cellphone: '',
-        username: '',
-        password: '', 
-        passwordRepeat: '',
-
-        sexoScan: sexoScan,
-        fnacScan: fnacScan,
-        nombreScan: nombreScan,
-        apellidoScan: apellidoScan,
-        dniScan: dniScan,
-        cuilScan: cuilScan, 
-
-        idusuario: '',
-        idpersona: '',
-
-        validateEmail: true,
-        validateCellphone: true,
-        validateUsername: true,
-        validatePassword: true,
-        validatePasswordRepeat: true,
-        validateAll: true,
-
-      }
-    }
-
-    changeEmail(email){
-      this.setState({email})
-    }
-    changeCellphone(cellphone){
-      this.setState({cellphone})
-    }
-    changeUsername(username){
-      this.setState({username})
-    }
-    changePassword(password){
-      this.setState({password})
-    }
-    changePasswordRepeat(passwordRepeat){
-      this.setState({passwordRepeat})
-    }
-    changeIdusuario(idusuario){
-      this.setState({idusuario})
-    }
-    changeIdpersona(idpersona){
-      this.setState({idpersona})
-    }
-
-    validate(email,cellphone,username,password,passwordRepeat){
-      // EMAIL
-      let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ; 
-      if(reg.test(email) === false) { 
-        // Ivalido
-        this.setState({validateEmail: false})
-      } else { 
-        // Valido  
-        this.setState({validateEmail: true})
-      } 
-
-      // CELLPHONE
-      let regCellphone = /^-{0,1}\d*\.{0,1}\d+$/ ;
-      if(regCellphone.test(cellphone) === false) { 
-        // Ivalido
-        this.setState({validateCellphone: false})
-      } else { 
-        // Valido  
-        if (cellphone.length > 7) {
-          this.setState({validateCellphone: true})
-        }else{
-          // Invalido
-          this.setState({validateCellphone: false})
-        }
-
-      } 
-
-      // USERNAME
-      let regUsername = /^[\w\.@]{6,100}$/;
-      if(regUsername.test(username) === false) { 
-        // Ivalido
-        this.setState({validateUsername: false})
-      } else { 
-        // Valido   
-        this.setState({validateUsername: true})
-      } 
-
-      // PASSWORD
-      let regPassword = /\s/;   // espacios en blanco
-      console.log('reg-->', regPassword.test(password))
-      console.log('length-->', password.length)
-      // si regPassword es TRUE quiere decir la clave esta mal
-      if (regPassword.test(password)) {
-        this.setState({validatePassword: false})
-      }
-      if (password.length < 5) {
-        this.setState({validatePassword: false})
-      }
-      if (password !== passwordRepeat) {
-        // Invalida: passwordRepeat
-        this.setState({validatePasswordRepeat: false})
-      }else{
-        // Valida: passwordRepeat
-        this.setState({validatePasswordRepeat: true})
-      }
-
-      // TODO
-      if (this.state.email,this.state.cellphone,this.state.username,this.state.password,this.state.passwordRepeat){
-        this.setState({validateAll: true})
-      }else{
-        this.setState({validateAll: false})
-      }
-
-    }
-
-    clickSend(){
-      // Validaciones
-      this.validate(this.state.email,this.state.cellphone,this.state.username,this.state.password,this.state.passwordRepeat)
-      console.log (`${this.state.email}-${this.state.cellphone}-${this.state.username}-${this.state.password}-${this.state.passwordRepeat}`)
- 
-      
-      if (this.state.validateAll) {
-
-        // POST usuario
-        let dataUser = {
-          "nom_usu": this.state.username, 
-          "con_usu": this.state.password, 
-          "id_tusu": 6
-        }
-        fetch(`${config.API_URL}usuario`, {
-          method: 'POST', // or 'PUT'
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(dataUser),
-        })
-        .then(response => JSON.stringify(response))
-        .then(data => {
-          console.log('Success:', data);      
-            })
-            
-        .catch((error) => {
-          console.error('Error:', error);
+        const [dataUser, setDataUser] = useState({  
+            email: '',
+            cellphone: '',
+            username: '',
+            password: '', 
+            passwordRepeat: '',
         }); 
+        const [ids, setIds] = useState({   
+            idusuario: '',
+            idpersona: '',
+        });
+        const [validateEmail, setValidateEmail] = useState({  state: false, msg: "" }); 
+        const [validateCellphone, setValidateCellphone] = useState({  state: false, msg: "" });
+        const [validateUsername, setValidateUsername] = useState({  state: false, msg: "" });
+        const [validatePassword, setValidatePassword] = useState({  state: false, msg: "" }); 
+        const [validatePasswordRepeat, setValidatePasswordRepeat] = useState({  state: false, msg: "" });  
+        const [validateAll, setValidateAll] =  useState({  state: false, msg: "" });  
         
-        // Put persona
-        let dataPersona = {
-          "nombre":  this.state.nombreScan,
-          "apellido":  this.state.apellidoScan,
-          "cuil":  this.state.cuilScan,
-          "celular":  this.state.cellphone 
-        } 
-        fetch(`${config.API_URL}persona/${this.state.dniScan}`, {
-          method: 'PUT', // or 'PUT'
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(dataPersona),
-        })
-        .then(response => JSON.stringify(response))
-        .then(d => {
-          console.log('Success:', d); 
-        })     
+ 
 
-        // Get persona
-        fetch(`${config.API_URL}persona/${this.state.dniScan}`).then((response) => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error('Algo anduvo mal.');
+    let clickSend = () => {
+        // Requiere completar todos los campos
+        if (  
+          email.trim() === "" ||
+          cellphone.trim() === "" ||
+          username.trim() === "" || 
+          password.trim() === "" ||
+          passwordRepeat.trim() === ""
+        ) {
+          setValidateAll({ state:false, msg:"Debe completar todos los campos"});
+          return null;
+        }
+      
+       // EMAIL
+       let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ; 
+       if(reg.test( email) === false) { 
+         // Ivalido 
+         setValidateEmail({ msg: "Email invalido", state: false })
+         return null;
+
+ 
+       } else { 
+         // Valido  
+         setValidateEmail({ msg: false, state: true })
+       } 
+ 
+       // CELLPHONE
+       let regCellphone = /^-{0,1}\d*\.{0,1}\d+$/ ;
+       if(regCellphone.test(cellphone) === false) { 
+         // Ivalido
+         setValidateCellphone({ msg: "Celular invalido", state: false }) 
+         return null;
+
+       } else { 
+         // Valido  
+         if (cellphone.length > 7) { 
+           setValidateCellphone({ msg: false, state: true }) 
+         }else{
+           // Invalido
+           setValidateCellphone({ msg: "Celular invalido", state: false }) 
+          return null;
+
+         }
+ 
+       } 
+ 
+       // USERNAME
+       let regUsername = /^[\w\.@]{6,100}$/;
+       if(regUsername.test(username) === false) { 
+         // Ivalido
+           setValidateUsername({
+             msg: "Usuario invalido.",
+             state: false
+           })
+          return null;
+
+       } else { 
+         // Valido     
+           // Username existente         
+           fetch(`${config.API_URL}lastusuario/${username}`).then((response) => {
+             if (response.ok) {
+               return response.json();
+             } else { 
+               alert('Algo anduvo mal.');   
+               return null;
+             }
+           })
+           .then((responseJson) => { 
+             
+             console.log('existe : ', responseJson.nom_usu) 
+             setValidateUsername({ msg: "Nombre de usuario en uso", state: false })  
+             return null;
+             
+           })
+           .catch((error) => {
+             console.log('okey! no existe: ', error)   
+             setValidateUsername({ msg: false , state: true })   
+           }); 
+   
+           
+         } 
+       // PASSWORD
+       let regPassword = /\s/;   // espacios en blanco 
+       // si regPassword es TRUE quiere decir la clave esta mal
+       if (regPassword.test(password)) { 
+         setValidatePassword({ msg: "Contrasena invalida", state: false })
+         return null;
+       }
+       else if (password.length < 5) { 
+         setValidatePassword({ msg: "Contrasena demasiado corta", state: false })
+          return null;
+       }
+       else if (password !== passwordRepeat) {
+         // Invalida: passwordRepeat
+         setValidatePasswordRepeat({ msg: "Las contrasenas no coinciden", state: false }) 
+         return null;
+        } 
+        else {
+         setValidatePasswordRepeat({ msg: false , state: true }) 
+         setValidatePassword({ msg: false , state: true }) 
+
+        } 
+ 
+       // TODO 
+        console.log('validateEmail: ', validateEmail.state)
+        console.log('validateCellphone: ', validateCellphone.state)
+        console.log('validateUsername: ', validateUsername.state)
+        console.log('validatePassword: ', validatePassword.state)
+        console.log('validatePasswordRepeat: ', validatePasswordRepeat.state)
+       if ( validateEmail.state && validateCellphone.state && validateUsername.state && validatePassword.state && validatePasswordRepeat.state){
+//          setValidateAll({ msg: false, state: true }) 
+
+          // POST usuario
+          let dataUser = {
+            "nom_usu":  username, 
+            "con_usu":  password, 
+            "id_tusu": 6
           }
-        })
-        .then((responseJson) => { 
-          console.log('id_per---> ',responseJson.idPersona)                 
-          this.changeIdpersona(responseJson.idPersona)      
-          
-          
-          // GET usuario (creado recien)
-          fetch(`${config.API_URL}lastusuario/${this.state.username}`).then((response) => {
+          fetch(`${config.API_URL}usuario`, {
+            method: 'POST', // or 'PUT'
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dataUser),
+          })
+          .then(response => JSON.stringify(response))
+          .then(data => {
+            console.log('Success:', data);      
+              })
+              
+          .catch((error) => {
+            console.error('Error:', error);
+          }); 
+
+          // Put persona
+          let dataPersona = {
+            "nombre":   nombreScan,
+            "apellido":   apellidoScan,
+            "cuil":   cuilScan,
+            "celular":   cellphone 
+          } 
+          fetch(`${config.API_URL}persona/${ dniScan}`, {
+            method: 'PUT', // or 'PUT'
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dataPersona),
+          })
+          .then(response => JSON.stringify(response))
+          .then(d => {
+            console.log('Success:', d); 
+          })     
+
+          // Get persona
+          fetch(`${config.API_URL}persona/${ dniScan}`).then((response) => {
             if (response.ok) {
               return response.json();
             } else {
-              throw new Error('Algo anduvo mal.');
+              alert('Algo anduvo mal.');
+              return null;
             }
           })
-          .then((resp) => { 
-            console.log('id_usu---> ',resp.id_usu)  
-            let dataAfiliado = {
-              "idusu":  resp.id_usu
-            } 
-            // PUT afiliado
-            console.log('idusuario-> ',this.state.idusuario)
-            console.log('idpersona-> ',this.state.idpersona)
-            fetch(`${config.API_URL}afiliado/${this.state.idpersona}`, {
-              method: 'PUT', // or 'PUT'
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(dataAfiliado),
+          .then((responseJson) => { 
+            console.log('id_per---> ',responseJson.idPersona)                 
+              //changeIdpersona(responseJson.idPersona)      
+              setIds({
+                  ...ids,
+                  'idpersona': responseJson.idPersona,
+                })  
+            
+            // GET usuario (creado recien)
+            fetch(`${config.API_URL}lastusuario/${ username}`).then((response) => {
+              if (response.ok) {
+                return response.json();
+              } else {
+                alert('Algo anduvo mal.');
+              return null;
+              
+              }
             })
-            .then(response => JSON.stringify(response))
-            .then(d => {
-              console.log('Success:', d); 
-              alert('Registrado correctamente.')
-              // redirec to ...
-            })        
+            .then((resp) => { 
+              console.log('id_usu---> ',resp.id_usu)  
+              let dataAfiliado = {
+                "idusu":  resp.id_usu
+              } 
+              // PUT afiliado
+              console.log('idusuario-> ', idusuario)
+              console.log('idpersona-> ', idpersona)
+              fetch(`${config.API_URL}afiliado/${ idpersona}`, {
+                method: 'PUT', // or 'PUT'
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dataAfiliado),
+              })
+              .then(response => JSON.stringify(response))
+              .then(d => {
+                console.log('Success:', d); 
+                alert('Registrado correctamente.')
+                // redirec to ...
+                navigation.navigate('Ingresar')
+                return null;
+              })        
+            });
           });
-        });
-        
-      }else{
-        alert('Hay campos incorrectos.')
-      }
 
 
 
 
 
+          
+       }else{
+ 
+          return null;
+       }
 
-
-        
  
 
+      
   
   }
 
 
 
-
-    render () {
+  const { 
+    username,
+    password, 
+    email,
+    cellphone, 
+    passwordRepeat,
+  } = dataUser;
+  const { 
+    idpersona, 
+    idusuario, 
+  } = ids;
 
       return (
         <View style={styles.container}>  
@@ -248,66 +270,96 @@ export default class Register extends Component {
           <TextInput
             style={styles.inputStyle}
             placeholder="Email"
-            value={this.state.email}
+            value={ email}
             maxLength={50}
             name="email"
-            onChangeText={(email) => this.changeEmail(email)}
+            onChangeText={       (email) =>
+                setDataUser({
+                  ...dataUser,
+                  'email': email,
+                })
+              }
+            //onChangeText={(email) =>   changeEmail(email)}
           /> 
-          { this.state.validateEmail ? null : <Text style={styles.msgError}>Email inválido</Text>}
+          {  validateEmail.state ? null : <Text style={styles.msgError}> {validateEmail.msg} </Text>}
           
           <TextInput
             style={styles.inputStyle}
             placeholder="Celular (Ej: 358464646)"
             maxLength={15} 
-            value={this.state.cellphone}
+            value={ cellphone}
             name="cellphone"
-            onChangeText={(cellphone) => this.changeCellphone(cellphone)}
+            onChangeText={       (cellphone) =>
+                setDataUser({
+                  ...dataUser,
+                  'cellphone': cellphone,
+                })
+              }
+            //onChangeText={(cellphone) =>   changeCellphone(cellphone)}
           /> 
-          { this.state.validateCellphone ? null : <Text style={styles.msgError}>Celular inválido</Text>}
+          {  validateCellphone.state ? null : <Text style={styles.msgError}> {validateCellphone.msg} </Text>}
 
           <TextInput
             style={styles.inputStyle}
             placeholder="Nombre de usuario"
             maxLength={20}
-            value={this.state.username}
+            value={ username}
             name="username"
-            onChangeText={(username) => this.changeUsername(username)}
+            onChangeText={       (username) =>
+                setDataUser({
+                  ...dataUser,
+                  'username': username,
+                })
+              }
+            //onChangeText={(username) =>   changeUsername(username)}
           />      
-          { this.state.validateUsername ? null : <Text style={styles.msgError}>Usuario inválido</Text>}
+          {  validateUsername.state ? null : <Text style={styles.msgError}> {validateUsername.msg} </Text>} 
           
           <TextInput
             style={styles.inputStyle}
             placeholder="Contraseña"
-            value={this.state.password}
+            value={ password}
             maxLength={15}
             secureTextEntry={true}
             name="password"
-            onChangeText={(password) => this.changePassword(password)}
+            onChangeText={       (password) =>
+                setDataUser({
+                  ...dataUser,
+                  'password': password,
+                })
+              }
+            //onChangeText={(password) =>   changePassword(password)}
           />
-          { this.state.validatePassword ? null : <Text style={styles.msgError}>Contraseña inválida</Text>}
+          {  validatePassword.state ? null : <Text style={styles.msgError}> {validatePassword.msg} </Text>}
 
           <TextInput
             style={styles.inputStyle}
             placeholder="Confirmar contraseña"
-            value={this.state.passwordRepeat}
+            value={ passwordRepeat}
             maxLength={15}
             secureTextEntry={true}
             name="passwordRepeat"
-            onChangeText={(passwordRepeat) => this.changePasswordRepeat(passwordRepeat)}
+            onChangeText={       (passwordRepeat) =>
+                setDataUser({
+                  ...dataUser,
+                  'passwordRepeat': passwordRepeat,
+                }) 
+              }
+            //onChangeText={(passwordRepeat) =>   changePasswordRepeat(passwordRepeat)}
           />   
-          { this.state.validatePasswordRepeat ? null : <Text style={styles.msgError}>Las contraseñas no coinciden</Text>}
+          {  validatePasswordRepeat.state ? null : <Text style={styles.msgError}>{validatePasswordRepeat.msg}</Text>}
+          {  validateAll.state ? null : <Text style={styles.msgError}>{validateAll.msg}</Text>}
 
           <TouchableHighlight 
             color="#3740FE"
-            onPress={() => { this.clickSend() }} >
+            onPress={() => { clickSend() }} >
             <Text>Registrarse</Text>        
             
           </TouchableHighlight>
               
         </ScrollView>
       </View>
-    );
-    }
+    ); 
     
   }
   

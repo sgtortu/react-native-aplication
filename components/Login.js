@@ -9,17 +9,22 @@ export default function Login({ navigation }) {
 
     const [dataUser, setDataUser] = useState({  
         username: '',
-        password: '',
+        password: '', 
     });
-    const [validateUsername, setValidateUsername] = useState(true);
-    const [validatePassword, setValidatePassword] = useState(true);
-    const [validateAll, setValidateAll] = useState(false);
- 
+    const [idUser, setIdUser] = useState('');
+    const [validateUsername, setValidateUsername] = useState(false);
+    const [validatePassword, setValidatePassword] = useState(false); 
   
-  let validate = (usernameV, passwordV) => {
-     
+  
+  let clickSend = () => {
+    // Validaciones
+    if (   username.trim() === "" ||  password.trim() === ""  ) {
+        setValidateUsername(false)
+        setValidatePassword(false)
+        return null;
+    }
     // USERNAME         
-    fetch(`${config.API_URL}lastusuario/${usernameV}`).then((response) => {
+    fetch(`${config.API_URL}lastusuario/${username}`).then((response) => {
       if (response.ok) {
         return response.json();
       } else {
@@ -28,18 +33,19 @@ export default function Login({ navigation }) {
 
         setValidatePassword(false)
         setValidateUsername(false)
-        
+                
       }
     })
-    .then((responseJson) => { 
-      
-      console.log('ok : ', responseJson.con_usu) 
-      if (responseJson.nom_usu !== usernameV) {
-        setValidateUsername(false)
-      } else {
+    .then((responseJson) => {  
+      console.log('responseJson: ', responseJson)  
+      setIdUser(responseJson.id_usu);
+
+      if (responseJson.nom_usu === username) {
         setValidateUsername(true)
+      } else {
+        setValidateUsername(false)
       }
-      if (responseJson.con_usu !== passwordV) {
+      if (responseJson.con_usu !== password) {
         setValidatePassword(false)
       } else {
         setValidatePassword(true)
@@ -48,28 +54,40 @@ export default function Login({ navigation }) {
     .catch((error) => {
       console.log('error: ', error)  
     });
+     
     
-    // PASSWORD
-    
-    // TODO
-    if ( usernameV, passwordV){
-      setValidateAll(true)
+    console.log(`pass: ${validatePassword} - name: ${validateUsername}`);
+
+    if (validatePassword && validateUsername){
+      console.log('Datos correctos')
+      
+
+
+
+      fetch(`${config.API_URL}usuarioactivo/${idUser}`).then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          //alert('Algo anduvo mal.');                   
+        }
+      })
+      .then((responseJson) => {  
+        console.log('rJ: ', responseJson) 
+        navigation.navigate('Credencial', {numAfiliado: responseJson.numAfiliado, nombrePersona: responseJson.nombrePersona, fingresoAfiliado: responseJson.fingresoAfiliado, documentoPersona: responseJson.documentoPersona, id_emp: responseJson.id_emp})
+        setValidatePassword(false);
+        setValidateUsername(false);
+      })
+      .catch((error) => {
+        console.log('error rJ: ', error)  
+      });
+       
+
+
+
+
+
     }else{
-      setValidateAll(false)
-    }
-    
-  }
-  
-  let clickSend = () => {
-    // Validaciones
-    validate(username, password)
-    
-    if ( validateAll) {
-      alert('okey! (Se inicia sesion).')
-      // Se inicia sesion
-      navigation.navigate('Credencial')
-    }else{
-      //alert('Hay campos incorrectos.')
+      alert('Hay campos incorrectos.')
     }
     
     
@@ -77,7 +95,7 @@ export default function Login({ navigation }) {
 
   const { 
     username,
-    password, 
+    password,  
   } = dataUser;
  
     

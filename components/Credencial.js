@@ -4,16 +4,25 @@ import { StyleSheet, Text, View, TextInput, ScrollView, TouchableHighlight } fro
 import config from "../config";
 
 export default function Credencial ({ route, navigation }) {
+
+  const { numAfiliado, nombrePersona, fingresoAfiliado, documentoPersona, id_emp } = route.params;
  
-      return (
-        <View style={styles.container}>  
-          <ScrollView>
-            <Text> Crendencial </Text>
-        </ScrollView>
-      </View>
-    ); 
+ 
+  return (
+    <View style={styles.container}>  
+      <ScrollView>
+        <Text> AFILIADO TITULAR </Text>
+        <Text> - </Text>
+        <Text> N॰ DE AFILIADO: {numAfiliado} </Text>
+        <Text> AFILIADO: {nombrePersona} </Text>
+        <Text> F. INGRESO: {fingresoAfiliado} </Text>
+        <Text> D.N.I: {documentoPersona} </Text>
+        <Text> EMPRESA (modicar): {id_emp} </Text>
+      </ScrollView>
+    </View>
+  ); 
     
-  }
+}
   
 const styles = StyleSheet.create({
   container: {

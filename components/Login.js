@@ -12,8 +12,8 @@ export default function Login({ navigation }) {
         password: '', 
     });
     const [idUser, setIdUser] = useState('');
-    const [validateUsername, setValidateUsername] = useState(false);
-    const [validatePassword, setValidatePassword] = useState(false); 
+    const [validateUsername, setValidateUsername] = useState(true);
+    const [validatePassword, setValidatePassword] = useState(true); 
   
   
   let clickSend = () => {
@@ -21,10 +21,10 @@ export default function Login({ navigation }) {
     if (   username.trim() === "" ||  password.trim() === ""  ) {
         setValidateUsername(false)
         setValidatePassword(false)
-        return null;
+        //return null;
     }
     // USERNAME         
-    fetch(`${config.API_URL}lastusuario/${username}`).then((response) => {
+    fetch(`http://192.168.0.7:3000/lastusuario/${username}`).then((response) => {
       if (response.ok) {
         return response.json();
       } else {
@@ -62,9 +62,8 @@ export default function Login({ navigation }) {
       console.log('Datos correctos')
       
 
-
-
-      fetch(`${config.API_URL}usuarioactivo/${idUser}`).then((response) => {
+ 
+      fetch(`http://192.168.0.7:3000/usuarioactivo/${idUser}`).then((response) => {
         if (response.ok) {
           return response.json();
         } else {
@@ -79,6 +78,7 @@ export default function Login({ navigation }) {
       })
       .catch((error) => {
         console.log('error rJ: ', error)  
+        alert('Ha ocurrido un problema.')
       });
        
 

@@ -1,31 +1,235 @@
  
 import React, { Component, useState } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, TouchableHighlight } from 'react-native';  
+import RNPickerSelect from 'react-native-picker-select';
 import config from "../config";
 
 export default function Register ({ route, navigation }) { 
-        // Desde Scanner.js vienen las siguientes variables: 
-        const { sexoScan, fnacScan, nombreScan, apellidoScan, dniScan, cuilScan } = route.params;
-  
-        const [dataUser, setDataUser] = useState({  
-            email: '',
-            cellphone: '',
-            username: '',
-            password: '', 
-            passwordRepeat: '',
-        }); 
-        const [ids, setIds] = useState({   
-            idusuario: '',
-            idpersona: '',
-        });
-        const [validateEmail, setValidateEmail] = useState({  state: false, msg: "" }); 
-        const [validateCellphone, setValidateCellphone] = useState({  state: false, msg: "" });
-        const [validateUsername, setValidateUsername] = useState({  state: false, msg: "" });
-        const [validatePassword, setValidatePassword] = useState({  state: false, msg: "" }); 
-        const [validatePasswordRepeat, setValidatePasswordRepeat] = useState({  state: false, msg: "" });  
-        const [validateAll, setValidateAll] =  useState({  state: false, msg: "" });  
-        
+
+    // Desde Scanner.js vienen las siguientes variables: 
+    const { sexoScan, fnacScan, nombreScan, apellidoScan, dniScan, cuilScan } = route.params;
+
+    const [dataUser, setDataUser] = useState({  
+        email: '',
+        cellphone: '',
+        username: '',
+        password: '', 
+        passwordRepeat: '', 
+      }); 
+    const [ids, setIds] = useState({   
+        idusuario: '',
+        idpersona: '',
+    });
+    const [validateEmail, setValidateEmail] = useState({  state: false, msg: "" }); 
+    const [validateCellphone, setValidateCellphone] = useState({  state: false, msg: "" });
+    const [validateUsername, setValidateUsername] = useState({  state: false, msg: "" });
+    const [validatePassword, setValidatePassword] = useState({  state: false, msg: "" }); 
+    const [validatePasswordRepeat, setValidatePasswordRepeat] = useState({  state: false, msg: "" });  
+    const [validateAll, setValidateAll] =  useState({  state: false, msg: "" });  
+    const [esPariente, setEsPariente] =  useState(false);  
+    
  
+
+
+    // Funcion username existente
+    const checkUsername = () => {
+      fetch(`http://192.168.0.7:3000/lastusuario/${username}`).then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else { 
+          alert('Algo anduvo mal.');   
+          return null;
+        }
+      })
+      .then((responseJson) => { 
+        
+        console.log('existe : ', responseJson.nom_usu) 
+        setValidateUsername({ msg: "Nombre de usuario en uso", state: false })  
+        return null;
+        
+      })
+      .catch((error) => {
+        setValidateUsername({ msg: false , state: true })   
+        console.log('okey! no existe: ', error)   
+      }); 
+    }
+    
+
+
+
+
+
+
+
+
+    
+    // Funcion Post Usuario
+    const postUsuario = (dataUser) => {
+      fetch(`http://192.168.0.7:3000/usuario`, {
+        method: 'POST', // or 'PUT'
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataUser),
+      })
+      .then(response => JSON.stringify(response))
+      .then(data => {
+        console.log('Success:', data);      
+      })
+      
+      .catch((error) => {
+        console.error('Error:', error);
+      }); 
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Funcion Put persona
+    const putPersona = () => {
+      
+      fetch(`http://192.168.0.7:3000/persona/${ dniScan}`).then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          alert('Algo anduvo mal.');
+          return null;
+        }
+      })
+      .then((responseJson) => { 
+        console.log('id_per---> ',responseJson.idPersona)                 
+          //changeIdpersona(responseJson.idPersona)      
+          setIds({
+              ...ids,
+              'idpersona': responseJson.idPersona,
+            })  
+
+        // GET usuario (creado recien) ---> para obtener id del usuario
+        getIdUsuario();
+
+      });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    // Funcion get usuario 
+    const getIdUsuario = () => {
+      fetch(`http://192.168.0.7:3000/lastusuario/${ username}`).then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          alert('Algo anduvo mal.');
+          return null;
+          
+        }
+      })
+      .then((resp) => { 
+        console.log('id_usu---> ',resp.id_usu)  
+        let dataAfiliado = {
+          "idusu":  resp.id_usu
+        } 
+        console.log('idusuario-> ', idusuario)
+        console.log('idpersona-> ', idpersona)
+        
+
+        // PUT afiliado
+        putAfiliado(dataAfiliado);
+      
+      });
+    }
+
+
+
+
+
+
+
+
+
+
+    // Funcion put afiliado
+    const putAfiliado = (dataAfiliado) => {
+      fetch(`http://192.168.0.7:3000/afiliado/${idpersona}`, {
+        method: 'PUT', // or 'PUT'
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataAfiliado),
+      })
+      .then(response => JSON.stringify(response))
+      .then(d => {
+        console.log('Success:', d); 
+        
+        setEsPariente('H')
+        if (!esPariente) {
+          alert('Registrado correctamente.')
+          navigation.navigate('Ingresar')
+          return null;  
+        }else{
+
+          postAfiliadoFlia();
+
+        }
+      })  
+    }
+
+
+
+
+
+
+
+    // Funcion post afiliado flia
+    const postAfiliadoFlia = () => {
+      console.log('esPariente: ', esPariente)
+      let dataAfiliadoFlia = {
+        "parentesco":  'H'
+      } 
+      fetch(`http://192.168.0.7:3000/afiliadoflia/${idpersona}`, {
+        method: 'POST', // or 'PUT'
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataAfiliadoFlia),
+      })
+      .then(response => JSON.stringify(response))
+      .then(d => {
+        console.log('Success:', d); 
+        alert('Registrado correctamente!.')
+        // redirec to ...
+        navigation.navigate('Ingresar')
+        return null;
+      })  
+    }
+
+
+
+
+
+
+
+
+
 
     let clickSend = () => {
         // Requiere completar todos los campos
@@ -86,25 +290,7 @@ export default function Register ({ route, navigation }) {
        } else { 
          // Valido     
            // Username existente         
-           fetch(`${config.API_URL}lastusuario/${username}`).then((response) => {
-             if (response.ok) {
-               return response.json();
-             } else { 
-               alert('Algo anduvo mal.');   
-               return null;
-             }
-           })
-           .then((responseJson) => { 
-             
-             console.log('existe : ', responseJson.nom_usu) 
-             setValidateUsername({ msg: "Nombre de usuario en uso", state: false })  
-             return null;
-             
-           })
-           .catch((error) => {
-             console.log('okey! no existe: ', error)   
-             setValidateUsername({ msg: false , state: true })   
-           }); 
+           checkUsername();
    
            
          } 
@@ -137,29 +323,14 @@ export default function Register ({ route, navigation }) {
         console.log('validatePassword: ', validatePassword.state)
         console.log('validatePasswordRepeat: ', validatePasswordRepeat.state)
        if ( validateEmail.state && validateCellphone.state && validateUsername.state && validatePassword.state && validatePasswordRepeat.state){
-//          setValidateAll({ msg: false, state: true }) 
-
+ 
           // POST usuario
           let dataUser = {
             "nom_usu":  username, 
             "con_usu":  password, 
             "id_tusu": 6
           }
-          fetch(`${config.API_URL}usuario`, {
-            method: 'POST', // or 'PUT'
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(dataUser),
-          })
-          .then(response => JSON.stringify(response))
-          .then(data => {
-            console.log('Success:', data);      
-              })
-              
-          .catch((error) => {
-            console.error('Error:', error);
-          }); 
+          postUsuario(dataUser);
 
           // Put persona
           let dataPersona = {
@@ -168,83 +339,16 @@ export default function Register ({ route, navigation }) {
             "cuil":   cuilScan,
             "celular":   cellphone 
           } 
-          fetch(`${config.API_URL}persona/${ dniScan}`, {
-            method: 'PUT', // or 'PUT'
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(dataPersona),
-          })
-          .then(response => JSON.stringify(response))
-          .then(d => {
-            console.log('Success:', d); 
-          })     
-
-          // Get persona
-          fetch(`${config.API_URL}persona/${ dniScan}`).then((response) => {
-            if (response.ok) {
-              return response.json();
-            } else {
-              alert('Algo anduvo mal.');
-              return null;
-            }
-          })
-          .then((responseJson) => { 
-            console.log('id_per---> ',responseJson.idPersona)                 
-              //changeIdpersona(responseJson.idPersona)      
-              setIds({
-                  ...ids,
-                  'idpersona': responseJson.idPersona,
-                })  
-            
-            // GET usuario (creado recien)
-            fetch(`${config.API_URL}lastusuario/${ username}`).then((response) => {
-              if (response.ok) {
-                return response.json();
-              } else {
-                alert('Algo anduvo mal.');
-              return null;
-              
-              }
-            })
-            .then((resp) => { 
-              console.log('id_usu---> ',resp.id_usu)  
-              let dataAfiliado = {
-                "idusu":  resp.id_usu
-              } 
-              // PUT afiliado
-              console.log('idusuario-> ', idusuario)
-              console.log('idpersona-> ', idpersona)
-              fetch(`${config.API_URL}afiliado/${ idpersona}`, {
-                method: 'PUT', // or 'PUT'
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(dataAfiliado),
-              })
-              .then(response => JSON.stringify(response))
-              .then(d => {
-                console.log('Success:', d); 
-                alert('Registrado correctamente.')
-                // redirec to ...
-                navigation.navigate('Ingresar')
-                return null;
-              })        
-            });
-          });
-
-
-
-
-
-          
-       }else{
+          putPersona(dataPersona);
  
-          return null;
-       }
+          // Get persona ---> para obtener idPersona
+          //getPersona();
 
- 
+       }else{ 
 
+        return null;
+       
+      }
       
   
   }
@@ -256,16 +360,28 @@ export default function Register ({ route, navigation }) {
     password, 
     email,
     cellphone, 
-    passwordRepeat,
+    passwordRepeat, 
   } = dataUser;
   const { 
     idpersona, 
     idusuario, 
   } = ids;
 
+  console.log('esPariente: ', esPariente)
       return (
         <View style={styles.container}>  
           <ScrollView>
+
+          <RNPickerSelect
+            style={styles.inputStyle}  
+            //onValueChange={(value) => console.log(value)}
+            onValueChange={(value) => setEsPariente(value)}
+         
+            items={[
+                { label: 'Afiliado', value: false },
+                { label: 'Familiar del afiliado', value: true },
+            ]}
+        />
 
           <TextInput
             style={styles.inputStyle}

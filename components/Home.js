@@ -14,7 +14,11 @@ export default function Home({ navigation }) {
                 color="#3740FE"  
                 testID="logoutButton"
                 // Escanear = PreRegister.js
-                onPress={() => navigation.navigate('Escanear')}
+                //onPress={() => navigation.navigate('Escanear')}
+                
+                //SOLO PARA EVITAR ESCANEAR (MODO DESARROLLO)
+                onPress={() => navigation.navigate('Register',{sexoScan: 'M', fnacScan: '03-05-200', nombreScan: 'SANTIAGO', apellidoScan: 'TORTU', dniScan: 42400448, cuilScan:20424004481 })}
+                
                 title="Registrarse"
             />
 

@@ -86,7 +86,7 @@ export default function Scanner({ navigation }) {
     if (type == 2048) {  
       let cuilScan = getCUIT(sexo,dni);
       // Comparar que el DNI del escaneo sea un AFILIADO ACTIVO 
-      fetch(`${config.API_URL}usuarios/${dni}`).then((response) => {
+      fetch(`http://192.168.0.7:3000/usuarios/${dni}`).then((response) => {
         if (response.ok) {
           return response.json();
         } else {
@@ -101,6 +101,7 @@ export default function Scanner({ navigation }) {
       .catch((error) => {
         console.log(error)
         alert('Inhabilitado.') 
+        console.log(config.API_URL)
         //  navigation.navigate('Inicio')
         // Redireccionar a Inicio
       });

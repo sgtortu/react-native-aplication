@@ -6,7 +6,31 @@ import config from "../config";
 export default function Credencial ({ route, navigation }) {
 
   const { numAfiliado, nombrePersona, fingresoAfiliado, documentoPersona, id_emp } = route.params;
- 
+  const [nameEmp, setNameEmp] = useState('');
+  const [loadEmp, setLoadEmp] = useState(false);
+  //const {nameEmp} = nameEmp;
+
+  if ( !loadEmp ) {
+    setLoadEmp(true)
+    fetch(`http://192.168.0.7:3000/empresa/${id_emp}`).then(response => {
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        alert("Tu credencial!");
+        //throw new TypeError("Oops, we haven't got JSON!");
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('emp: ',data)
+      setNameEmp(data.rs_emp)
+    })
+    .catch(error => console.error(error), 
+    alert("Tu credencial!")
+    
+    //setValidateAll({ state:false, msg:"Algo anduvo mal. Vuelva a intentarlo."})
+    
+    );
+  }
  
   return (
     <View style={styles.container}>  
@@ -17,7 +41,7 @@ export default function Credencial ({ route, navigation }) {
         <Text> AFILIADO: {nombrePersona} </Text>
         <Text> F. INGRESO: {fingresoAfiliado} </Text>
         <Text> D.N.I: {documentoPersona} </Text>
-        <Text> EMPRESA (modicar): {id_emp} </Text>
+        <Text> EMPRESA: {nameEmp} </Text>
       </ScrollView>
     </View>
   ); 

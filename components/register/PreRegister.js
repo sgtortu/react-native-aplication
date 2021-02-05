@@ -1,7 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { StyleSheet, Button, Text, View, Image  } from 'react-native';
 
-export default function PreRegister({ navigation }) { 
+export default function PreRegister({ route,navigation }) { 
+
+    const { parentesco } = route.params;
  
     // Obtener el Cuit desde el dni escaneado
     const getCUIT = (gender, dni) => {
@@ -60,7 +62,7 @@ export default function PreRegister({ navigation }) {
             <Button
                 color="#3740FE"  
                 testID="logoutButton"
-                onPress={() => navigation.navigate('Scanner', {id:'santiago'})}
+                onPress={() => navigation.navigate('Scanner', {parentesco:parentesco})}
                 title="Presione aqui para continuar"
             />
             

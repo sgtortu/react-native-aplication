@@ -1,20 +1,23 @@
  
-import React, { Component, useState } from 'react';
-import { Button,StyleSheet, Text, View, TextInput, ScrollView, TouchableHighlight } from 'react-native';  
-import config from "../config"; 
+import React, { useState } from 'react';
+import { Button, Text, View, TextInput, ScrollView, TouchableHighlight } from 'react-native';  
+import { styles } from "./styles/styles"; 
 
 
+export default function Login({ route, navigation }) { 
 
-export default function Login({ navigation }) { 
-
-    const [dataUser, setDataUser] = useState({  
-        username: '',
-        password: '', 
-    });
-    const [idUser, setIdUser] = useState('');
-    const [validateUsername, setValidateUsername] = useState(true);
-    const [validatePassword, setValidatePassword] = useState(true); 
   
+  const [dataUser, setDataUser] = useState({  
+    username: '',
+    password: '', 
+  });
+  const [idUser, setIdUser] = useState('');
+  const [validateUsername, setValidateUsername] = useState(true);
+  const [validatePassword, setValidatePassword] = useState(true); 
+  const [loadDataRegister, setLoadDataRegister] = useState(true); 
+  const [validateAll, setValidateAll] =  useState({  state: false, msg: "" });   
+  
+
   
   let clickSend = () => {
     // Validaciones
@@ -61,33 +64,37 @@ export default function Login({ navigation }) {
     if (validatePassword && validateUsername){
       console.log('Datos correctos')
       
+      setValidateAll({ state:true, msg:false})
 
- 
-      fetch(`http://192.168.0.7:3000/usuarioactivo/${idUser}`).then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          //alert('Algo anduvo mal.');                   
+      fetch(`http://192.168.0.7:3000/usuarioactivo/${idUser}`).then(response => { 
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          alert("Oops, hubo un problema!");
+          //throw new TypeError("Oops, we haven't got JSON!");
         }
+        return response.json();
       })
-      .then((responseJson) => {  
+      .then(responseJson => {
         console.log('rJ: ', responseJson) 
         navigation.navigate('Credencial', {numAfiliado: responseJson.numAfiliado, nombrePersona: responseJson.nombrePersona, fingresoAfiliado: responseJson.fingresoAfiliado, documentoPersona: responseJson.documentoPersona, id_emp: responseJson.id_emp})
         setValidatePassword(false);
         setValidateUsername(false);
       })
-      .catch((error) => {
+      .catch(error => {
         console.log('error rJ: ', error)  
-        alert('Ha ocurrido un problema.')
+        setValidateAll({ state:false, msg:"Algo anduvo mal. Vuelva a intentarlo."})
+ 
       });
-       
+
+     
 
 
 
 
 
-    }else{
-      alert('Hay campos incorrectos.')
+    }else{ 
+      setValidateAll({ state:false, msg:"Hay campos incorrectos."})
+
     }
     
     
@@ -137,6 +144,7 @@ export default function Login({ navigation }) {
         //onChangeText={(password) => this.changePassword(password)}
       />
       {  validatePassword ? null : <Text style={styles.msgError}>Contraseña inválida</Text>}
+      {  validateAll.state ? null : <Text style={styles.msgError}>{validateAll.msg}</Text>}
  
       <TouchableHighlight 
         style={styles.button}
@@ -152,7 +160,7 @@ export default function Login({ navigation }) {
           color="#3740FE"  
           testID="logoutButton"
           // Escanear = PreRegister.js
-          onPress={() => navigation.navigate('Escanear')}
+          onPress={() => navigation.navigate('Family')}
           title="Registrarse"
       />
           
@@ -163,32 +171,4 @@ export default function Login({ navigation }) {
   ) 
 }
 
-const styles = StyleSheet.create({
-    buttonContainer: {
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-    },
-    button: {
-      width: 300,
-      height: 40,
-      marginTop: 10,
-    },
-    container: {
-      flex: 1,
-      flexDirection: 'column',
-      alignItems: 'center',
-      marginTop: 35
-    },
-    inputStyle: {
-      width: '100%',
-      marginBottom: 15,
-      paddingBottom: 15,
-      alignSelf: "center",
-      borderColor: "#ccc",
-      borderBottomWidth: 1
-    },
-    msgError: {
-      color: 'red',
-      marginBottom: 3, 
-    },
-  });
+ 

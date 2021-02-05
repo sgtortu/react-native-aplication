@@ -3,9 +3,11 @@
 import React,  { useState, useEffect }  from 'react';
 import { Button, Text, View ,StyleSheet} from 'react-native'; 
 import { BarCodeScanner } from 'expo-barcode-scanner'; 
-import config from "../config";
+import config from "../../config";
 
-export default function Scanner({ navigation }) {  
+export default function Scanner({ route,navigation }) {  
+
+  const { parentesco } = route.params;
 
   // Cuil
   const getCUIT = (gender, dni) => {
@@ -67,20 +69,22 @@ export default function Scanner({ navigation }) {
     let elements = data.split("@");
     console.log('elements: ', elements)
     let dni,apellido,nombre,fnac,sexo = '';
-    if (data[0] == '@') {
-      // Dni mas antiguo
-      dni = elements[1].trim();
-      apellido = elements[4].trim();
-      nombre = elements[5].trim(); 
-      fnac = elements[7].trim();
-      sexo = elements[8].trim();
-    }else{
-      // Dni mas reciente
-      dni = elements[4].trim();
-      apellido = elements[1].trim();
-      nombre = elements[2].trim(); 
-      fnac = elements[6].trim();
-      sexo = elements[3].trim();
+    if (elements.length > 1) {      
+      if (data[0] == '@') {
+        // Dni mas antiguo
+        dni = elements[1].trim();
+        apellido = elements[4].trim();
+        nombre = elements[5].trim(); 
+        fnac = elements[7].trim();
+        sexo = elements[8].trim();
+      }else{
+        // Dni mas reciente
+        dni = elements[4].trim();
+        apellido = elements[1].trim();
+        nombre = elements[2].trim(); 
+        fnac = elements[6].trim();
+        sexo = elements[3].trim();
+      }
     }
     // Discriminar a los que no sean pdf417. Un QR por ejemplo
     if (type == 2048) {  
@@ -94,8 +98,8 @@ export default function Scanner({ navigation }) {
         }
       })
       .then((responseJson) => { 
-        alert('Ya puedes registrarte.')
-        navigation.navigate('Register',{sexoScan: sexo, fnacScan: fnac, nombreScan: nombre, apellidoScan: apellido, dniScan: dni, cuilScan: cuilScan })
+        //alert('Ya puedes registrarte.')
+        navigation.navigate('Register',{parentesco:parentesco, sexoScan: sexo, fnacScan: fnac, nombreScan: nombre, apellidoScan: apellido, dniScan: dni, cuilScan: cuilScan })
         // Redireccionar a Form Registracion 
       })
       .catch((error) => {

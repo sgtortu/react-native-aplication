@@ -1,9 +1,11 @@
 
 
 import React,  { useState, useEffect }  from 'react';
-import { Button, Text, View ,StyleSheet} from 'react-native'; 
+import { Dimensions, Button, Text, View ,StyleSheet} from 'react-native'; 
 import { BarCodeScanner } from 'expo-barcode-scanner'; 
 import config from "../../config";
+
+const { width } = Dimensions.get('window');
 
 export default function Scanner({ route,navigation }) {  
 
@@ -128,17 +130,50 @@ export default function Scanner({ route,navigation }) {
       <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
-      />
+      >       
+        <View style={styles.layerTop} />
+        <View style={styles.layerCenter}>
+          <View style={styles.layerLeft} />
+          <View style={styles.focused} />
+          <View style={styles.layerRight} />
+        </View>
+        <View style={styles.layerBottom} />
+      </BarCodeScanner>
+      
       {scanned && <Button title={'Toca para escanear nuevamente.'} onPress={() => setScanned(false)} />}
     </View>
 
   )
 }
  
+const opacity = 'rgba(0, 0, 0, .6)';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center',
+    //justifyContent: 'center',
+  },
+  layerTop: {
+    flex: 2,
+    backgroundColor: opacity
+  },
+  layerCenter: {
+    flex: 1,
+    flexDirection: 'row'
+  },
+  layerLeft: {
+    flex: 1,
+    backgroundColor: opacity
+  },
+  focused: {
+    flex: 10
+  },
+  layerRight: {
+    flex: 1,
+    backgroundColor: opacity
+  },
+  layerBottom: {
+    flex: 2,
+    backgroundColor: opacity
   },
 });

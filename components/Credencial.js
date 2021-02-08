@@ -33,7 +33,7 @@ export default function Credencial ({ route, navigation }) {
   }
  
   return (
-    <View style={styles.container}>  
+    <View style={ globalStyles.container}>  
       <ScrollView>
         <Text> AFILIADO TITULAR </Text>
         <Text> - </Text>

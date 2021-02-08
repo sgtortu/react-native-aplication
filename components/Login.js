@@ -1,8 +1,7 @@
  
 import React, { useState } from 'react';
-import { Button, Text, View, TextInput, ScrollView, TouchableHighlight } from 'react-native';  
-import { styles } from "./styles/styles"; 
-
+import { StyleSheet, Button, Text, View, TextInput, ScrollView, TouchableHighlight } from 'react-native';  
+import { globalStyles } from './styles/global';
 
 export default function Login({ route, navigation }) { 
 
@@ -107,12 +106,16 @@ export default function Login({ route, navigation }) {
  
     
     return (
-      <View style={styles.container}>  
-      <ScrollView>
- 
+      <View style={ globalStyles.container}>  
+      
 
-      <TextInput
-        style={styles.inputStyle}
+      <ScrollView>
+  
+      <Text style={ globalStyles.h1 } > Iniciar sesión </Text>
+
+
+      <TextInput  
+        style={ globalStyles.inputStyle}
         placeholder="Nombre de usuario"
         maxLength={20}
         value={ username}
@@ -124,11 +127,12 @@ export default function Login({ route, navigation }) {
           })
         }
         //onChangeText={(username) => this.changeUsername(username)}
-      />      
-      {  validateUsername ? null : <Text style={styles.msgError}>Usuario no registrado</Text>}
+      /> 
+ 
+      {  validateUsername ? null : <Text style={ globalStyles.msgError}>Usuario no registrado</Text>}
       
       <TextInput
-        style={styles.inputStyle}
+        style={ globalStyles.inputStyle}
         placeholder="Contraseña"
         value={ password}
         maxLength={15}
@@ -142,33 +146,41 @@ export default function Login({ route, navigation }) {
         }
         
         //onChangeText={(password) => this.changePassword(password)}
-      />
-      {  validatePassword ? null : <Text style={styles.msgError}>Contraseña inválida</Text>}
-      {  validateAll.state ? null : <Text style={styles.msgError}>{validateAll.msg}</Text>}
+        />
+      {  validatePassword ? null : <Text style={ globalStyles.msgError}>Contraseña inválida</Text>}
+      {  validateAll.state ? null : <Text style={ globalStyles.msgError}>{validateAll.msg}</Text>}
  
-      <TouchableHighlight 
-        style={styles.button}
-        color="#3740FE"
-        onPress={() => { clickSend() }} >
-        <Text>Ingresar</Text>        
-        
+
+      <Button 
+        style={ globalStyles.button }
+        color="#043464" 
+        onPress={() => { clickSend() }}  
+          title="Ingresar"    
+      ></Button>
+
+      <TouchableHighlight
+        onPress={() => navigation.navigate('Family')}
+        >
+        <Text style={ globalStyles.buttonText} >¿Has olvidado la contraseña?</Text>
       </TouchableHighlight>
 
-      <Text>¿Aún no se ha registrado?</Text>
-      <Button
-          style={styles.button}
-          color="#3740FE"  
-          testID="logoutButton"
-          // Escanear = PreRegister.js
-          onPress={() => navigation.navigate('Family')}
-          title="Registrarse"
-      />
-          
- 
+      <Text style={globalStyles.inline}>  </Text>
+  
+      <Button 
+        style={ styles.buttonSmall }
+        onPress={() => navigation.navigate('Family')}
+        title='Crear nueva cuenta'
+        color='#0474D4'
+        > </Button>
+       
     </ScrollView>
     
   </View>
   ) 
 }
 
- 
+const styles = StyleSheet.create({  
+  // margin: {
+  //     marginTop: 15
+  // }
+});

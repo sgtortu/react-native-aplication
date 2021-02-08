@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-const styles = StyleSheet.create({
+export const globalStyles = StyleSheet.create({
     container: {
       flex: 1,
       display: "flex",
@@ -12,16 +12,11 @@ const styles = StyleSheet.create({
     inputStyle: {
       width: '100%',
       marginBottom: 15,
-      paddingBottom: 15,
+      paddingBottom: 5,
       alignSelf: "center",
       borderColor: "#ccc",
       borderBottomWidth: 1
-    },
-    loginText: {
-      color: '#3740FE',
-      marginTop: 25,
-      textAlign: 'center'
-    },
+    }, 
     msgError: {
       color: 'red',
       marginBottom: 3, 
@@ -39,12 +34,34 @@ const styles = StyleSheet.create({
     button: {
       width: 300,
       height: 40,
-      marginTop: 10,
+      marginTop: 10,   
+    },  
+    buttonText: {     
+      color: '#043464', 
+      marginTop: 15,
+      //marginBottom: 15,
+      textAlign: "center"
+    }, 
+    h1: {      
+      fontSize: 28,
+      color:'#043464',
+      textAlign: 'center',
+      marginTop: 15,  
+      marginBottom: 45
     },
-    buttonContainer: {
-      flexDirection: 'column',
-      justifyContent: 'space-between',
+    h4: {      
+      fontSize: 16,
+      color:'#043464', 
+      marginTop: 5,  
+      marginBottom: 5
     },
+    inline: { 
+      alignSelf: "center",
+      borderColor: "#ccc",
+      borderBottomWidth: 1,
+      width: '80%', 
+      marginBottom: 15,
+      marginTop:15
+    }
   });
-
-  export { styles }
+ 

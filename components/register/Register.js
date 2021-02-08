@@ -1,7 +1,7 @@
  
 import React, { useState } from 'react';
 import { Text, View, TextInput, ScrollView, TouchableHighlight } from 'react-native';  
-import { styles } from "../styles/styles"; 
+import { globalStyles } from '../styles/global';
 
 export default function Register ({ route, navigation }) { 
 
@@ -418,14 +418,14 @@ export default function Register ({ route, navigation }) {
 
       // Vista
       return (
-        <View style={styles.container}>  
+        <View style={ globalStyles.container}>  
           <ScrollView>
 
 
 
           {/* Email */}
           <TextInput
-            style={styles.inputStyle}
+            style={ globalStyles.inputStyle}
             placeholder="Email"
             value={ email}
             maxLength={50}
@@ -438,7 +438,7 @@ export default function Register ({ route, navigation }) {
               }
             //onChangeText={(email) =>   changeEmail(email)}
           /> 
-          {  validateEmail.state ? null : <Text style={styles.msgError}> {validateEmail.msg} </Text>}
+          {  validateEmail.state ? null : <Text style={ globalStyles.msgError}> {validateEmail.msg} </Text>}
 
 
 
@@ -446,7 +446,7 @@ export default function Register ({ route, navigation }) {
 
           {/* Cellphone */}
           <TextInput
-            style={styles.inputStyle}
+            style={ globalStyles.inputStyle}
             placeholder="Celular (Ej: 358464646)"
             maxLength={15} 
             value={ cellphone}
@@ -459,7 +459,7 @@ export default function Register ({ route, navigation }) {
               }
             //onChangeText={(cellphone) =>   changeCellphone(cellphone)}
           /> 
-          {  validateCellphone.state ? null : <Text style={styles.msgError}> {validateCellphone.msg} </Text>}
+          {  validateCellphone.state ? null : <Text style={ globalStyles.msgError}> {validateCellphone.msg} </Text>}
 
 
 
@@ -471,7 +471,7 @@ export default function Register ({ route, navigation }) {
 
           {/* Username */}
           <TextInput
-            style={styles.inputStyle}
+            style={ globalStyles.inputStyle}
             placeholder="Nombre de usuario"
             maxLength={20}
             value={ username}
@@ -484,7 +484,7 @@ export default function Register ({ route, navigation }) {
               }
             //onChangeText={(username) =>   changeUsername(username)}
           />      
-          {  validateUsername.state ? null : <Text style={styles.msgError}> {validateUsername.msg} </Text>} 
+          {  validateUsername.state ? null : <Text style={ globalStyles.msgError}> {validateUsername.msg} </Text>} 
           
 
 
@@ -495,7 +495,7 @@ export default function Register ({ route, navigation }) {
 
           {/* Password */}
           <TextInput
-            style={styles.inputStyle}
+            style={ globalStyles.inputStyle}
             placeholder="Contraseña"
             value={ password}
             maxLength={15}
@@ -509,7 +509,7 @@ export default function Register ({ route, navigation }) {
               }
             //onChangeText={(password) =>   changePassword(password)}
           />
-          {  validatePassword.state ? null : <Text style={styles.msgError}> {validatePassword.msg} </Text>}
+          {  validatePassword.state ? null : <Text style={ globalStyles.msgError}> {validatePassword.msg} </Text>}
 
 
 
@@ -519,7 +519,7 @@ export default function Register ({ route, navigation }) {
 
           {/* Password repeat */}
           <TextInput
-            style={styles.inputStyle}
+            style={ globalStyles.inputStyle}
             placeholder="Confirmar contraseña"
             value={ passwordRepeat}
             maxLength={15}
@@ -533,8 +533,8 @@ export default function Register ({ route, navigation }) {
               }
             //onChangeText={(passwordRepeat) =>   changePasswordRepeat(passwordRepeat)}
           />   
-          {  validatePasswordRepeat.state ? null : <Text style={styles.msgError}>{validatePasswordRepeat.msg}</Text>}
-          {  validateAll.state ? null : <Text style={styles.msgError}>{validateAll.msg}</Text>}
+          {  validatePasswordRepeat.state ? null : <Text style={ globalStyles.msgError}>{validatePasswordRepeat.msg}</Text>}
+          {  validateAll.state ? null : <Text style={ globalStyles.msgError}>{validateAll.msg}</Text>}
 
 
 

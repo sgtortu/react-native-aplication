@@ -1,7 +1,9 @@
  
 import React, { useState } from 'react';
-import { StyleSheet, Text, View,  ScrollView, TouchableHighlight } from 'react-native';  
+import { StyleSheet, Text, View,  ScrollView, Button } from 'react-native';  
 import RNPickerSelect from 'react-native-picker-select';
+import { globalStyles } from '../styles/global';
+
 //import config from "../../config";
 
 export default function Family ({ route, navigation }) { 
@@ -26,32 +28,36 @@ export default function Family ({ route, navigation }) {
 
     // Vista
     return (
-        <View style={styles.container}>  
-            <ScrollView>
+        <View style= {globalStyles.container}>  
+            <ScrollView>               
 
-                <Text>Se registrara como: </Text>        
-                <RNPickerSelect
-                    style={styles.inputStyle}   
-                    onValueChange={(value) => setparentesco(value)}
-                    
-                    items={[
-                        { label: 'Afiliado', value: 'A' }, 
-                        { label: 'Hijo del afiliado', value: 'H' },
-                        { label: 'Esposa del afiliado', value: 'E' },
-                        { label: 'Concubino del afiliado', value: 'C' },
-                        { label: 'Nieto del afiliado', value: 'N' },
-                        { label: 'Otro', value: 'N/D' },
-                    ]}
-                />
-    
-                {  msgErrorParentesco.state ? <Text style={styles.msgError}> {msgErrorParentesco.msg} </Text> : null}
-            
-                <TouchableHighlight 
-                    color="#3740FE"
-                    onPress={() => { clickContinue() }} >
-                    <Text>Continuar</Text>        
-                </TouchableHighlight> 
-    
+              <Text style={ globalStyles.h1 } > Registrarte </Text>
+
+              <Text style={ globalStyles.h4 }>Se registrara como: </Text>        
+              <RNPickerSelect
+                  style= {globalStyles.inputStyle}   
+                  onValueChange={(value) => setparentesco(value)}
+                  placeholder={{label:'Seleccionar...', value: null}}
+                  value={'A'}
+                  items={[
+                    { label: 'Afiliado', value: 'A' }, 
+                    { label: 'Hijo del afiliado', value: 'H' },
+                    { label: 'Esposa del afiliado', value: 'E' },
+                    { label: 'Concubino del afiliado', value: 'C' },
+                    { label: 'Nieto del afiliado', value: 'N' },
+                    { label: 'Otro', value: 'N/D' },
+                  ]}
+                  />
+  
+                {  msgErrorParentesco.state ? <Text style= {globalStyles.msgError}> {msgErrorParentesco.msg} </Text> : null}
+                  
+                <Text style= {styles.margin}></Text>
+                <Button                                     
+                  onPress={() => { clickContinue() }}                      
+                  title='Continuar'
+                  color='#043464'
+                  > </Button>
+                 
             </ScrollView>
         </View>
     ); 
@@ -59,39 +65,9 @@ export default function Family ({ route, navigation }) {
 }
   
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    padding: 35,
-    backgroundColor: '#fff'
-  },
-  inputStyle: {
-    width: '100%',
-    marginBottom: 15,
-    paddingBottom: 15,
-    alignSelf: "center",
-    borderColor: "#ccc",
-    borderBottomWidth: 1
-  },
-  loginText: {
-    color: '#3740FE',
-    marginTop: 25,
-    textAlign: 'center'
-  },
-  msgError: {
-    color: 'red',
-    marginBottom: 3, 
-  },
-  preloader: {
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fff'
-  }
+   
+  margin: {
+    marginTop: 20, 
+  }, 
+
 });

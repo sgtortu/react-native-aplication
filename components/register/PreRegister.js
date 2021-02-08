@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { StyleSheet, Button, Text, View, Image  } from 'react-native';
+import { globalStyles } from '../styles/global';
 
 export default function PreRegister({ route,navigation }) { 
 
@@ -48,47 +49,49 @@ export default function PreRegister({ route,navigation }) {
     console.log(getCUIT('a', 20516222));
 
     return (
-        <View>
+        <View style={ globalStyles.container}>
           
-            <Text style={styles.subtitle} > Debe escanear su DNI para continuar</Text>
-
-            <Image
-                style={styles.image}
-                source={{
-                uri: 'https://emigrante.com.ve/wp-content/uploads/2018/04/DNI-Argentina.jpg',
-                }}
-            />
+            <Text style={ globalStyles.h1} > Registrarte</Text>
+            <Text style={ styles.h4} > Debe escanear su DNI para continuar.</Text>
             
+
+            {/* require('../assets/images/logo.png')
+              <Image
+                  style={ styles.image}
+                  source={{
+                    uri: 'https://emigrante.com.ve/wp-content/uploads/2018/04/DNI-Argentina.jpg',
+                  }}
+              />
+            */}
+              <Image
+                  style={styles.image }
+                  source={require('../../assets/images/codigo-dni.jpg')}
+              />       
             <Button
-                color="#3740FE"  
+                style={ globalStyles.button}
+                color="#043464"  
                 testID="logoutButton"
                 onPress={() => navigation.navigate('Scanner', {parentesco:parentesco})}
-                title="Presione aqui para continuar"
+                title="Escanear DNI"
             />
             
         </View>
     );
 }
  
-const styles = StyleSheet.create({
-    h1: {      
-        fontSize: 35,
-        textAlign: 'center',
-        marginTop: 5,
-        marginBottom: 5,
-      },
-    subtitle: {  
-        fontSize: 20,
-        textAlign: 'center',
-        marginTop: 20,
-        marginBottom: 5,
-    },
+const styles = StyleSheet.create({ 
     image: {
         marginTop: 15,   
-        marginBottom: 15,   
-        width: 360,
-        height: 247,
-        display: 'flex',  
+        marginBottom: 55,    
+        
+         width: 290,
+         height: 70,
+        //display: 'flex',  
     },
-    
+    h4: {      
+      fontSize: 17,
+      color:'#043464', 
+      marginTop: 5,  
+      marginBottom: 5
+    },
   });

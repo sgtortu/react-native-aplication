@@ -7,6 +7,7 @@ export const globalStyles = StyleSheet.create({
       flexDirection: "column",
       justifyContent: "center",
       padding: 35,
+      marginTop: -15,
       backgroundColor: '#fff'
     },
     inputStyle: {
@@ -19,7 +20,9 @@ export const globalStyles = StyleSheet.create({
     }, 
     msgError: {
       color: 'red',
-      marginBottom: 3, 
+      marginBottom: 10, 
+      marginTop: -10,
+      fontSize: 12,
     },
     preloader: {
       left: 0,
@@ -54,6 +57,12 @@ export const globalStyles = StyleSheet.create({
       color:'#043464', 
       marginTop: 5,  
       marginBottom: 5
+    },
+    h6: {      
+      fontSize: 12,
+      color:'#043464', 
+      marginTop: 0,  
+      marginBottom: 1
     },
     inline: { 
       alignSelf: "center",

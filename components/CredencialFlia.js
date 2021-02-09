@@ -63,7 +63,7 @@ export default function Credencial ({ route, navigation }) {
 
             <Image
               style={{height:widthPercent , width:heightPercent}}
-              source={require('../assets/images/afi-titular-header.png')}
+              source={require('../assets/images/afi-adherente-header.png')}
               />  
 
             <View style={   {marginTop:paddingTextPercent, marginBottom:paddingTextPercent, marginLeft:paddingTextPercent*3 }    }> 
@@ -72,6 +72,8 @@ export default function Credencial ({ route, navigation }) {
               <Text style={styles.text} > F. INGRESO: {fingresoAfiliado} </Text>
               <Text style={styles.text} > D.N.I: {documentoPersona} </Text>
               <Text style={styles.text} > EMPRESA: {nameEmp} </Text>
+              <Text style={styles.text} > PARENTESCO: {documentoPersona} </Text>
+              <Text style={styles.text} > AFILIADO TITULAR: {nameEmp} </Text>
             </View>
 
             <Image
@@ -99,8 +101,8 @@ const styles = StyleSheet.create({
   text: { 
     fontSize: 16,
     color:'#000',  
-    marginTop: 5,  
-    marginBottom: 5, 
+    marginTop: 2,  
+    marginBottom: 2, 
   },  
 });
 

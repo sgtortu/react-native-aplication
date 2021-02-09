@@ -1,6 +1,6 @@
  
 import React, { useState } from 'react';
-import { Text, View, TextInput, ScrollView, TouchableHighlight } from 'react-native';  
+import { StyleSheet, Button, Text, View, TextInput, ScrollView, TouchableHighlight } from 'react-native';  
 import { globalStyles } from '../styles/global';
 
 export default function Register ({ route, navigation }) { 
@@ -106,7 +106,7 @@ export default function Register ({ route, navigation }) {
         password.trim() === "" ||
         passwordRepeat.trim() === ""
       ) {
-        setValidateAll({ state:false, msg:"Debe completar todos los campos"});
+        setValidateAll({ state:false, msg:"Debe completar todos los campos."});
         return null;      
       }
 
@@ -119,7 +119,7 @@ export default function Register ({ route, navigation }) {
       let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ; 
       if(reg.test(email) === false) { 
         // Ivalido 
-        setValidateEmail({ msg: "Email invalido", state: false })  
+        setValidateEmail({ msg: "Email inválido", state: false })  
         return null;
 
 
@@ -139,7 +139,7 @@ export default function Register ({ route, navigation }) {
       let regCellphone = /^-{0,1}\d*\.{0,1}\d+$/ ;
       if(regCellphone.test(cellphone) === false) { 
         // Ivalido
-        setValidateCellphone({ msg: "Celular invalido", state: false }) 
+        setValidateCellphone({ msg: "Celular inválido", state: false }) 
         return null;
 
       } else { 
@@ -147,8 +147,8 @@ export default function Register ({ route, navigation }) {
         if (cellphone.length > 5) { 
           setValidateCellphone({ msg: false, state: true }) 
         }else{
-          // Invalido
-          setValidateCellphone({ msg: "Celular invalido", state: false }) 
+          // inválido
+          setValidateCellphone({ msg: "Celular inválido", state: false }) 
           return null;
 
         }
@@ -164,7 +164,7 @@ export default function Register ({ route, navigation }) {
       if(regUsername.test(username) === false) { 
         // Ivalido
           setValidateUsername({
-            msg: "Usuario invalido.",
+            msg: "Usuario inválido.",
             state: false
           })
         return null;
@@ -199,16 +199,16 @@ export default function Register ({ route, navigation }) {
         let regPassword = /\s/;   // espacios en blanco 
         // si regPassword es TRUE quiere decir la clave esta mal
         if (regPassword.test(password)) { 
-          setValidatePassword({ msg: "Contrasena invalida", state: false })
+          setValidatePassword({ msg: "Contraseña invalida.", state: false })
           return null;
         }
         else if (password.length < 5) { 
-          setValidatePassword({ msg: "Contrasena demasiado corta", state: false })
+          setValidatePassword({ msg: "Contraseña demasiado corta.", state: false })
           return null;
         }
         else if (password !== passwordRepeat) {
           // Invalida: passwordRepeat
-          setValidatePasswordRepeat({ msg: "Las contrasenas no coinciden", state: false }) 
+          setValidatePasswordRepeat({ msg: "Las contraseñas no coinciden.", state: false }) 
           return null;
         } 
         else {
@@ -419,11 +419,13 @@ export default function Register ({ route, navigation }) {
       // Vista
       return (
         <View style={ globalStyles.container}>  
-          <ScrollView>
+          <Text style={ globalStyles.h1 } > Registrarte </Text>
+          <ScrollView style={ styles.background }> 
 
 
 
           {/* Email */}
+          <Text style={ globalStyles.h6}>Email</Text>
           <TextInput
             style={ globalStyles.inputStyle}
             placeholder="Email"
@@ -445,9 +447,10 @@ export default function Register ({ route, navigation }) {
 
 
           {/* Cellphone */}
+          <Text style={ globalStyles.h6}>Celular</Text>
           <TextInput
             style={ globalStyles.inputStyle}
-            placeholder="Celular (Ej: 358464646)"
+            placeholder="Ejemplo: 358464646"
             maxLength={15} 
             value={ cellphone}
             name="cellphone"
@@ -470,6 +473,7 @@ export default function Register ({ route, navigation }) {
 
 
           {/* Username */}
+          <Text style={ globalStyles.h6}>Nombre de usuario</Text>
           <TextInput
             style={ globalStyles.inputStyle}
             placeholder="Nombre de usuario"
@@ -494,6 +498,7 @@ export default function Register ({ route, navigation }) {
 
 
           {/* Password */}
+          <Text style={ globalStyles.h6}>Contraseña</Text>
           <TextInput
             style={ globalStyles.inputStyle}
             placeholder="Contraseña"
@@ -518,6 +523,7 @@ export default function Register ({ route, navigation }) {
 
 
           {/* Password repeat */}
+          <Text style={ globalStyles.h6}>Confirmar contraseña</Text>
           <TextInput
             style={ globalStyles.inputStyle}
             placeholder="Confirmar contraseña"
@@ -541,13 +547,6 @@ export default function Register ({ route, navigation }) {
 
 
 
-          {/*/ Button register */}
-          <TouchableHighlight 
-            color="#3740FE"
-            onPress={() => { clickSend() }} >
-            <Text>Registrarse</Text>                    
-          </TouchableHighlight>
-
 
 
 
@@ -556,8 +555,29 @@ export default function Register ({ route, navigation }) {
 
               
         </ScrollView>
+          {/*/ Button register */} 
+          <View style={ styles.button }>
+
+            <Button 
+              
+              color="#043464" 
+              onPress={() => { clickSend() }}  
+              title="Registrarse"    
+              ></Button>
+          </View>
       </View>
     ); 
     
   }
-   
+
+const styles = StyleSheet.create({  
+  background: {
+      backgroundColor: '#f5f5f5',
+      padding: 10,
+      marginTop: -20,
+      marginBottom: 5,
+  },
+  button: {  
+    marginTop: 10
+  }, 
+});

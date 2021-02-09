@@ -11,6 +11,7 @@ import Family from './components/register/Family';
 import Login from './components/Login';
 import Home from './components/Home';
 import Credencial from './components/Credencial';
+import CredencialFlia from './components/CredencialFlia';
  
  
 const Stack = createStackNavigator();
@@ -21,15 +22,25 @@ export default function App() {
     return (
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Inicio">
-          <Stack.Screen name="Escanear" component={PreRegister} />
-          <Stack.Screen name="Scanner" component={Scanner} />
-          <Stack.Screen name="Register" component={Register} />
-          <Stack.Screen name="Family" component={Family} />
+
+          <Stack.Screen options={{title:''}} name="Escanear" component={PreRegister} />
+
+          <Stack.Screen options={{title:'Escaneé su DNI'}} name="Scanner" component={Scanner} />
+
+          <Stack.Screen options={{title:''}} name="Register" component={Register} />
+
+          <Stack.Screen options={{title:''}} name="Family" component={Family} />
+
           <Stack.Screen name="Ingresar" component={Login} />
-          <Stack.Screen name="Inicio" component={Home} />
-          <Stack.Screen name="Credencial" component={Credencial} />
+
+          <Stack.Screen options={{title:'Inicio'}} name="Inicio" component={Home} />
+
+          <Stack.Screen options={{headerShown: false}} name="Credencial" component={Credencial} />      
+
+          <Stack.Screen options={{headerShown: false}} name="CredencialFlia" component={CredencialFlia} />      
+
         </Stack.Navigator>
       </NavigationContainer>
     )
    
-}
+} 

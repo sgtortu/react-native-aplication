@@ -27,7 +27,7 @@ export default function App() {
 
           <Stack.Screen options={{title:'Escaneé su DNI'}} name="Scanner" component={Scanner} />
 
-          <Stack.Screen options={{title:''}} name="Register" component={Register} />
+          <Stack.Screen options={{title:'Registrarte'}} name="Register" component={Register} />
 
           <Stack.Screen options={{title:''}} name="Family" component={Family} />
 

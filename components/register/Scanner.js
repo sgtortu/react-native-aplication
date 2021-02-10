@@ -9,7 +9,7 @@ const { width } = Dimensions.get('window');
 
 export default function Scanner({ route,navigation }) {  
 
-  const { parentesco } = route.params;
+  const { parentesco } = route.params; 
 
   // Cuil
   const getCUIT = (gender, dni) => {
@@ -91,30 +91,68 @@ export default function Scanner({ route,navigation }) {
     // Discriminar a los que no sean pdf417. Un QR por ejemplo
     if (type == 2048) {  
       let cuilScan = getCUIT(sexo,dni);
+      
       // Comparar que el DNI del escaneo sea un AFILIADO ACTIVO 
-      fetch(`http://192.168.0.7:3000/usuarios/${dni}`).then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Algo anduvo mal.');
-        }
-      })
-      .then((responseJson) => { 
-        //alert('Ya puedes registrarte.')
-        navigation.navigate('Register',{parentesco:parentesco, sexoScan: sexo, fnacScan: fnac, nombreScan: nombre, apellidoScan: apellido, dniScan: dni, cuilScan: cuilScan })
-        // Redireccionar a Form Registracion 
-      })
-      .catch((error) => {
-        console.log(error)
-        alert('Inhabilitado.') 
-        console.log(config.API_URL)
-        //  navigation.navigate('Inicio')
-        // Redireccionar a Inicio
-      });
-          
-      }else{
-        alert('No se ha identificado un DNI.');
+      if (parentesco == 'A') { // Si es afiliado TITULAR...
+        console.log('entre en SI afiliadofli')
+        // Start fetch
+        fetch(`http://192.168.0.7:3000/usuarios/${dni}`).then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Algo anduvo mal.');
+          }
+        })
+        .then((responseJson) => { 
+          //alert('Ya puedes registrarte.')
+          let idpersona = responseJson.idPersona;
+          navigation.navigate('Register',{idpersona: idpersona,parentesco:parentesco, sexoScan: sexo, fnacScan: fnac, nombreScan: nombre, apellidoScan: apellido, dniScan: dni, cuilScan: cuilScan })
+          // Redireccionar a Form Registracion 
+        })
+        .catch((error) => {
+          console.log('Inhabilitado.')
+          alert('Inhabilitado.')  
+        });
+        // End fetch
+
+
+
+      
+      } else { // si NO es afiliado titular
+          console.log('entre en NO afiliadoflia')
+
+          // Start fetch persona - afiliado - usuarioactivo
+          fetch(`http://192.168.0.7:3000/personaAfiliadoUsuario/${dni}`).then((response) => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error('Algo anduvo mal (persona).');
+            }
+          })
+          .then((responseJson) => {             
+
+            if(responseJson.response[0].idPersona){
+              let idpersona = responseJson.response[0].idPersona;
+              console.log('idpersona---> ',idpersona)
+              navigation.navigate('Register',{idpersona: idpersona,parentesco: parentesco, sexoScan: sexo, fnacScan: fnac, nombreScan: nombre, apellidoScan: apellido, dniScan: dni, cuilScan: cuilScan })
+            } else {
+              console.log('Inhabilitado');
+              alert('Inhabilitado.') ;
+            } 
+
+
+          })
+          .catch((error) => {
+            console.log('Inhabilitado');
+            alert('Inhabilitado.') ;
+          });
+          // End fetch persona           
+
       }
+            
+    }else{
+      alert('No se ha identificado un DNI.');
+    }
   
   };
 

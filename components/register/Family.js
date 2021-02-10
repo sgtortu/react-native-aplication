@@ -9,18 +9,18 @@ import { globalStyles } from '../styles/global';
 export default function Family ({ route, navigation }) { 
   
     // Estados
-    const [parentesco, setparentesco] =  useState(0);  
+    const [parentesco, setparentesco] =  useState('A');  
     const [msgErrorParentesco, setmsgErrorParentesco] = useState({  state: false, msg: "" }); 
     
     // Click continuar
     let clickContinue = () => {
          
-        if (parentesco !== 0) {
+        if (parentesco === 'A' || parentesco === 'B' ) {
             navigation.navigate('Escanear',{parentesco: parentesco})
             // MODO DESARROLLO - Debe redireccionar al Sacaneo
             //navigation.navigate('Register',{parentesco: parentesco, sexoScan: 'M', fnacScan: '03-05-200', nombreScan: 'SANTIAGO', apellidoScan: 'TORTU', dniScan: 42400448, cuilScan:20424004481 })
         } else {   
-            setmsgErrorParentesco({state:true, msg:'Debe completar los campos.'})
+            setmsgErrorParentesco({state:true, msg:'Debe seleccionar una opción.'})
             return null;
         }
           
@@ -37,15 +37,16 @@ export default function Family ({ route, navigation }) {
               <RNPickerSelect
                   style= {globalStyles.inputStyle}   
                   onValueChange={(value) => setparentesco(value)}
-                  placeholder={{label:'Seleccionar...', value: null}}
+                  placeholder={{label:'Seleccionar...'}}
                   value={'A'}
                   items={[
-                    { label: 'Afiliado', value: 'A' }, 
-                    { label: 'Hijo del afiliado', value: 'H' },
-                    { label: 'Esposa del afiliado', value: 'E' },
-                    { label: 'Concubino del afiliado', value: 'C' },
-                    { label: 'Nieto del afiliado', value: 'N' },
-                    { label: 'Otro', value: 'N/D' },
+                    { label: 'Afiliado titular', value: 'A' }, 
+                    // { label: 'Hijo del afiliado', value: 'H' },
+                    // { label: 'Esposa del afiliado', value: 'E' },
+                    // { label: 'Concubino del afiliado', value: 'C' },
+                    // { label: 'Nieto del afiliado', value: 'N' },
+                    // { label: 'Otro', value: 'N/D' },
+                    { label: 'Familiar del afiliado', value: 'B' }, 
                   ]}
                   />
   

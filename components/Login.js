@@ -4,6 +4,7 @@ import { StyleSheet, Button, Text, View, TextInput, ScrollView, TouchableHighlig
 import { globalStyles } from './styles/global';
 
 export default function Login({ route, navigation }) { 
+   
 
   
   const [dataUser, setDataUser] = useState({  

@@ -5,9 +5,23 @@ import { globalStyles } from './styles/global';
 
 export default function Credencial ({ route, navigation }) {
 
-  const { numAfiliado, nombrePersona, fingresoAfiliado, documentoPersona, id_emp } = route.params;
-  const [nameEmp, setNameEmp] = useState('');
-  const [loadEmp, setLoadEmp] = useState(false);
+  const { 
+    numAfiliado, 
+    nombrePersona, 
+    fingresoAfiliado, 
+    documentoPersona, 
+    rs_emp 
+  } = route.params;
+
+  function getParsedDate(date){
+    date = String(date).split(' ');
+    var days = String(date[0]).split('-');
+    var hours = String(date[1]).split(':');
+    return [parseInt(days[0]), parseInt(days[1])-1, parseInt(days[2]), parseInt(hours[0]), parseInt(hours[1]), parseInt(hours[2])];
+  }
+  let fecha = getParsedDate(fingresoAfiliado) 
+  let fechaIngreso = `${fecha[2]}/${fecha[1]}/${fecha[0]}`;   
+
    
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
@@ -18,35 +32,14 @@ export default function Credencial ({ route, navigation }) {
   let paddingPercent = (windowWidth / 100) * 11;
   let paddingTextPercent = (windowWidth / 100) * 2;
 
-  console.log('----: ' );
+  // console.log('----: ' );
 
-  console.log(`W = ${windowWidth} - ${widthPercent}%`) 
-  console.log(`H = ${windowHeight} - ${heightPercent}%`)  
-  console.log(`paddingPercent = ${paddingPercent}%`)  
-  console.log(`paddingTextPercent = ${paddingTextPercent}%`)  
+  // console.log(`W = ${windowWidth} - ${widthPercent}%`) 
+  // console.log(`H = ${windowHeight} - ${heightPercent}%`)  
+  // console.log(`paddingPercent = ${paddingPercent}%`)  
+  // console.log(`paddingTextPercent = ${paddingTextPercent}%`)  
 
-  if ( !loadEmp ) {
-    setLoadEmp(true)
-    fetch(`http://192.168.0.7:3000/empresa/${id_emp}`).then(response => {
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
-        alert("Tu credencial!");
-        //throw new TypeError("Oops, we haven't got JSON!");
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log('emp: ',data)
-      setNameEmp(data.rs_emp)
-    })
-    .catch(error => console.error(error), 
-    alert("Tu credencial!")
-    
-    //setValidateAll({ state:false, msg:"Algo anduvo mal. Vuelva a intentarlo."})
-    
-    );
-  }
- 
+  
   /*
   
   TENER EN CUENTA QUE:
@@ -69,9 +62,9 @@ export default function Credencial ({ route, navigation }) {
             <View style={   {marginTop:paddingTextPercent, marginBottom:paddingTextPercent, marginLeft:paddingTextPercent*3 }    }> 
               <Text style={styles.text} > N॰ DE AFILIADO:  {numAfiliado} </Text>   
               <Text style={styles.text} > AFILIADO: {nombrePersona} </Text>
-              <Text style={styles.text} > F. INGRESO: {fingresoAfiliado} </Text>
+              <Text style={styles.text} > F. INGRESO: {fechaIngreso} </Text>
               <Text style={styles.text} > D.N.I: {documentoPersona} </Text>
-              <Text style={styles.text} > EMPRESA: {nameEmp} </Text>
+              <Text style={styles.text} > EMPRESA: {rs_emp} </Text>
             </View>
 
             <Image

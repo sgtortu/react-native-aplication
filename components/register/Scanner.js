@@ -94,7 +94,7 @@ export default function Scanner({ route,navigation }) {
       
       // Comparar que el DNI del escaneo sea un AFILIADO ACTIVO 
       if (parentesco == 'A') { // Si es afiliado TITULAR...
-        console.log('entre en SI afiliadofli')
+        console.log('entre en SI afiliadoflia')
         // Start fetch
         fetch(`http://192.168.0.7:3000/usuarios/${dni}`).then((response) => {
           if (response.ok) {
@@ -105,9 +105,17 @@ export default function Scanner({ route,navigation }) {
         })
         .then((responseJson) => { 
           //alert('Ya puedes registrarte.')
-          let idpersona = responseJson.idPersona;
-          navigation.navigate('Register',{idpersona: idpersona,parentesco:parentesco, sexoScan: sexo, fnacScan: fnac, nombreScan: nombre, apellidoScan: apellido, dniScan: dni, cuilScan: cuilScan })
-          // Redireccionar a Form Registracion 
+          console.log('resp: ', responseJson.response[0].idPersona) 
+
+          if(responseJson.response[0].idPersona){
+            let idpersona = responseJson.response[0].idPersona; 
+            navigation.navigate('Register',{idpersona: idpersona,parentesco:parentesco, sexoScan: sexo, fnacScan: fnac, nombreScan: nombre, apellidoScan: apellido, dniScan: dni, cuilScan: cuilScan })
+          
+          } else {
+            console.log('Ya se registro (titular)');
+            alert('Ya te has registrado.') ;
+          } 
+
         })
         .catch((error) => {
           console.log('Inhabilitado.')
@@ -130,14 +138,15 @@ export default function Scanner({ route,navigation }) {
             }
           })
           .then((responseJson) => {             
+            console.log('rj--> ',responseJson.response[0].idPersona)
 
             if(responseJson.response[0].idPersona){
               let idpersona = responseJson.response[0].idPersona;
               console.log('idpersona---> ',idpersona)
               navigation.navigate('Register',{idpersona: idpersona,parentesco: parentesco, sexoScan: sexo, fnacScan: fnac, nombreScan: nombre, apellidoScan: apellido, dniScan: dni, cuilScan: cuilScan })
             } else {
-              console.log('Inhabilitado');
-              alert('Inhabilitado.') ;
+              console.log('Ya se registro (familiar)');
+              alert('Ya te has registrado.') ;
             } 
 
 

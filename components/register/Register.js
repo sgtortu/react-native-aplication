@@ -36,51 +36,13 @@ export default function Register ({ route, navigation }) {
     const [validatePassword, setValidatePassword] = useState({  state: true, msg: "" }); 
     const [validatePasswordRepeat, setValidatePasswordRepeat] = useState({  state: true, msg: "" });  
     const [validateAll, setValidateAll] =  useState({  state: true, msg: "" });   
-    
-    // Estados para usernames existentes (1)
-    const [usersRegistered, setUsersRegistered] =  useState([]);  
-    const [loadUseReg, setLoadUseReg] =  useState(false);  
-    let usernamesRegistered = [];  
-    
+ 
     // Estados para user(afiliado) activo (2)
     const [userActive, setUserActive] =  useState('');  
     const [loadUseAct, setLoadUseAct] =  useState(false);   
 
 
-
-
-
-
-
-
-
-
- 
-    // (1) Username existente (get all a la vista usuario)
-    if(!loadUseReg){
-      setLoadUseReg(true)
-      fetch(`http://192.168.0.7:3000/usuario`).then(response => {
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-          alert("Oops, hubo un problema!");
-          //throw new TypeError("Oops, we haven't got JSON!");
-        }
-        return response.json();
-      })
-      .then(data => {
-        setUsersRegistered(data)
-      })
-      .catch(error => console.error(error),
-        setValidateAll({ state:false, msg:" "})
-      
-      );
-    }
-
-    for (let i = 0; i < usersRegistered.length; i++) {
-      usernamesRegistered.push(usersRegistered[i].nom_usu);
-    }
- 
-
+    
 
     let clickSend = () => {
       setDisabled(true)
@@ -94,6 +56,7 @@ export default function Register ({ route, navigation }) {
         passwordRepeat.trim() === ""
       ) {
         setValidateAll({ state:false, msg:"Debe completar todos los campos."});
+        setDisabled(false)
         return null;      
       }
 
@@ -154,27 +117,16 @@ export default function Register ({ route, navigation }) {
             msg: "Usuario inválido.",
             state: false
           })
+          setDisabled(false)
         return null;
 
       } else { 
-        // Valido     
-
-          // Username existente   
-          if (usernamesRegistered.length > 0) {
-            
-            let includesUsername = usernamesRegistered.includes(username);  
-            if (includesUsername) {
-              setValidateUsername({
-                msg: "Usuario existente.",
-                state: false
-              })
-            }else{
-              setValidateUsername({
-                msg: false,
-                state: true
-              })
-            } 
-          }      
+        // Valido              
+          setValidateUsername({
+            msg: false,
+            state: true
+          })
+              
         }    
         
         
@@ -231,6 +183,7 @@ export default function Register ({ route, navigation }) {
           'celular': cellphone, 
           'mail': email,
           'idPersona': idpersona,  
+          //'dni':dniScan
         }
         
         if ( validateEmail.state && validateCellphone.state && validateUsername.state && validatePassword.state && validatePasswordRepeat.state){  
@@ -246,17 +199,26 @@ export default function Register ({ route, navigation }) {
               },
               body: JSON.stringify(dataRegister),
             })
-            .then(response => JSON.stringify(dataRegister))
-            .then(response => {
-              console.log('Bien:', response);  
-              alert("Registrado correctamente.")     
-              navigation.navigate('Ingresar')
+            .then(response => response.json())
+            .then(data => {
+              console.log('Bien:', data.response.insertId);  
+              if (data.response.insertId) {
+                alert("Registrado correctamente.")     
+                navigation.navigate('Ingresar')
+              }  else {
+                setValidateUsername({
+                  msg: data.response,
+                  state: false
+                })
+                setDisabled(false)
+              }
               
               // Redireccionar al Login con los datos de logueo
             })          
             .catch((error) => {
               console.error('Error:', error);
               setValidateAll({ state:false, msg:" "})
+              setDisabled(false)
             });  
             
           }, 1200);

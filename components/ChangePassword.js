@@ -42,9 +42,8 @@ export default function changePassword ({ route, navigation }) {
       if(data.response){
         // ok
         alert('Enviado. Revise su email.')
-        setTimeout(() => {
-          navigation.navigate('Ingresar')
-        }, 2000);
+        navigation.navigate('Ingresar')
+        
       } else {
         // error
         setDisabled(false)
@@ -90,6 +89,7 @@ export default function changePassword ({ route, navigation }) {
         </View>
 
         <Text style={globalStyles.h4}>Recibira su nueva contraseña via email.</Text>
+        <Text style={globalStyles.h6}>Si no lo recibe, revise los spam.</Text>
 
     </View>
   ); 

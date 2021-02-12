@@ -7,15 +7,7 @@ export default function Home({ navigation }) {
     
 
     return (
-        <View style={globalStyles.container}>
-            
-            <Button
-                color="#0474D6"  
-                testID="logoutButton"
-                // Ingresar = Login.js
-                onPress={() => navigation.navigate('CredencialFlia',{ numAfiliado:'72', nombrePersona:'SANTIAGO TORTU', fingresoAfiliado:'10-10-2012', documentoPersona:42400448, id_emp:'100' })}
-                title="Credencial (borrar)"
-            /> 
+        <View style={globalStyles.container}> 
             
             <View style={styles.localContainer}>
                 <Text style={ globalStyles.h1 } > Bienvenido </Text>
@@ -44,7 +36,7 @@ export default function Home({ navigation }) {
                 testID="logoutButton"
                 // Ingresar = Login.js
                 onPress={() => navigation.navigate('Ingresar')}
-                title="Iniciar sesion"
+                title="Iniciar sesiÓn"
             /> 
             
         </View>

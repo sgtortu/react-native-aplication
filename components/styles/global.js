@@ -5,7 +5,7 @@ export const globalStyles = StyleSheet.create({
       flex: 1,
       display: "flex",
       flexDirection: "column",
-      justifyContent: "center",
+      //justifyContent: "center",
       padding: 35,
       marginTop: -15,
       backgroundColor: '#fff'

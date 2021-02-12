@@ -137,7 +137,7 @@ export default function Login({ route, navigation }) {
       ></Button>
 
       <TouchableHighlight
-        onPress={() => navigation.navigate('Family')}
+        onPress={() => navigation.navigate('ChangePassword')}
         >
         <Text style={ globalStyles.buttonText} >¿Has olvidado la contraseña?</Text>
       </TouchableHighlight>

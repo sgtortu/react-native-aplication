@@ -12,6 +12,7 @@ import Login from './components/Login';
 import Home from './components/Home';
 import Credencial from './components/Credencial';
 import CredencialFlia from './components/CredencialFlia';
+import ChangePassword from './components/ChangePassword';
  
  
 const Stack = createStackNavigator();
@@ -37,7 +38,9 @@ export default function App() {
 
           <Stack.Screen options={{headerShown: false}} name="Credencial" component={Credencial} />      
 
-          <Stack.Screen options={{headerShown: false}} name="CredencialFlia" component={CredencialFlia} />      
+          <Stack.Screen options={{headerShown: false}} name="CredencialFlia" component={CredencialFlia} />     
+
+          <Stack.Screen options={{title:''}} name="ChangePassword" component={ChangePassword} />
 
         </Stack.Navigator>
       </NavigationContainer>

@@ -72,11 +72,11 @@ const styles = StyleSheet.create({
         marginBottom: 10,        
     }, 
     h1: {  
-        fontSize: 28,
-        color:'#043464',
-        textAlign: 'center',
-        marginTop: 15,  
-        marginBottom: 45,
-        textTransform: 'capitalize'     
+      fontSize: 28,
+      color:'#043464',
+      textAlign: 'center',
+      marginTop: 15,  
+      marginBottom: 45,
+      textTransform: 'capitalize'     
     }, 
   });

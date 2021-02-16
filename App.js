@@ -1,99 +1,3 @@
-// import React, {useState, useEffect} from 'react';
-// import { Text, View, StyleSheet, Button } from 'react-native'; 
-
-// import { NavigationContainer } from '@react-navigation/native';
-// import { createStackNavigator } from '@react-navigation/stack';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-
-// import PreRegister from './components/register/PreRegister';
-// import Scanner from './components/register/Scanner';
-// import Register from './components/register/Register';
-// import Family from './components/register/Family';
-// import Login from './components/Login';
-// import Home from './components/Home';
-// import Credencial from './components/Credencial';
-// import CredencialFlia from './components/CredencialFlia';
-// import ChangePassword from './components/ChangePassword';
- 
- 
-// const Stack = createStackNavigator(); 
-
-// export default function App() {  
-
-
-
-//   return (
-//     <NavigationContainer>
-//       <Stack.Navigator initialRouteName="Inicio">
-
-//         <Stack.Screen options={{title:''}} name="Escanear" component={PreRegister} />
-
-//         <Stack.Screen options={{title:'Escaneé su DNI'}} name="Scanner" component={Scanner} />
-
-//         <Stack.Screen options={{title:'Registrarte'}} name="Register" component={Register} />
-
-//         <Stack.Screen options={{title:''}} name="Family" component={Family} />
-
-//         <Stack.Screen name="Ingresar" component={Login} />
-
-//         <Stack.Screen options={{title:'Inicio'}} name="Inicio" component={Home} />
-
-//         <Stack.Screen options={{headerShown: false}} name="Credencial" component={Credencial} />      
-
-//         <Stack.Screen options={{headerShown: false}} name="CredencialFlia" component={CredencialFlia} />     
-
-//         <Stack.Screen options={{title:''}} name="ChangePassword" component={ChangePassword} />
-
-//       </Stack.Navigator>
-//     </NavigationContainer>
-//   )
-   
-// } 
-
-// // import React, { Component } from "react";
-// // import { ActivityIndicator, ActivityIndicatorBase, StatusBar, View } from "react-native";
-// // import { createStackNavigator, createAppContainer } from '@react-navigation/native';  
-// // import { HomeScreen } from "./components/Login";
-// // import { DetailsScreen } from "./components/Credencial";
-// // import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
-// // const RootStack = createStackNavigator(
-// //   { Details: DetailsScreen }, 
-// // )
-
-// // const AuthStack = createStackNavigator(
-// //   { Home: HomeScreen }
-// // )
-
-// // useEffect(() => { 
-// // getData(); Family
-// // },[]);
-
-// // const getData = async() => {
-// // try {
-// //   const jsonValue = await AsyncStorage.getItem('isLoggedIn')
- 
-// //       this.props.navigation.navigate(jsonValue ? 'App' : 'Auth');
- 
-// // } catch(e) {
-// //   // error reading value
-// // }
-// // } 
- 
-
-// // export default createAppContainer(createSwitchNavigator(
-// //   {
-// //     AuthLoading: AuthLoadingScreen,
-// //     App: RootStack,
-// //     Auth: AuthStack
-// //   },
-// //   {
-// //     initialRouteName: 'AuthLoading'
-// //   }
-// // ));
- 
-
 import * as React from 'react'; 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -231,14 +135,20 @@ export default function App({ navigation }) {
     <AuthContext.Provider value={authContext}>
         <NavigationContainer>   
           <Stack.Navigator>  
-            { state.userToken !== null ? (
-              <>
-                <Stack.Screen options={{headerShown: false }} initialParams={JSON.parse(state.userToken)} name="Home" component={AuthStack} />  
-              </>
-              ) : (
-                <Stack.Screen options={{headerShown: false }} name="Login" component={AuthStack} />  
- 
-            )}
+            {state.userToken === 'dummy-auth-token' ?               
+              <Stack.Screen options={{headerShown: false }} name="Login" component={AuthStack} />             
+            : 
+            <>
+              { state.userToken !== null ? (
+                <>
+                    <Stack.Screen options={{headerShown: false }} initialParams={JSON.parse(state.userToken)} name="Home" component={AuthStack} />
+                </>
+                ) : (
+                  <Stack.Screen options={{headerShown: false }} name="Login" component={AuthStack} />  
+
+              )}
+            </>
+            }
         </Stack.Navigator>
       </NavigationContainer>
     </AuthContext.Provider>

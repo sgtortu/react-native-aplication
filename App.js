@@ -51,6 +51,34 @@ function AuthStack({route}) {
  
 
 export default function App({ navigation }) {
+ 
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('veces')
+      if(value !== null) {
+        // value previously stored
+        console.log('value Man: ', value)
+        return value;
+      }
+    } catch(e) {
+      // error reading value
+      console.log('error en APP Man: ')
+
+    }
+  }
+
+  const storeData = async (value) => {
+    try {
+      await AsyncStorage.setItem('veces', value.toString())
+      console.log('RE Bien Man:')
+
+    } catch (e) {
+      // saving error
+      console.log('RE Error Man:')
+    }
+  }
+
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -100,7 +128,14 @@ export default function App({ navigation }) {
 
       // This will switch to the App screen or Auth screen and this loading
       // screen will be unmounted and thrown away.
-      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+      let veces = await getData();
+      storeData(Number(veces)+1);
+      if (veces > 4) {
+        authContext.signOut();
+        storeData(0);
+      }else{
+        dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+      }
     };
 
     bootstrapAsync();

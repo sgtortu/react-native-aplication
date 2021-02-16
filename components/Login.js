@@ -3,6 +3,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { StyleSheet, Button, Text, View, TextInput, ScrollView, TouchableHighlight } from 'react-native';  
 import { globalStyles } from './styles/global'; 
 import { AuthContext } from "./utils";
+import AsyncStorage from '@react-native-async-storage/async-storage';  
 
 export default function Login({ route, navigation }) { 
    
@@ -11,6 +12,16 @@ export default function Login({ route, navigation }) {
   
   const { signIn } = React.useContext(AuthContext);
 
+  const storeData = async (value) => {
+    try {
+      await AsyncStorage.setItem('veces', value.toString())
+      console.log('Bien Man:')
+
+    } catch (e) {
+      // saving error
+      console.log('Error Man:')
+    }
+  }
   
   const [dataUser, setDataUser] = useState({  
     //username: 'Prueba1jdjdj', 
@@ -46,6 +57,7 @@ export default function Login({ route, navigation }) {
         } else { 
           console.log('data.response[1][0]: ', data.response[1][0])
           signIn(data.response[1][0])
+          storeData(0)
           // if (data.response[0].afiliadoTitular) { 
           //   // navigate credencial titular
           //   const { 

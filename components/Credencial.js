@@ -1,17 +1,22 @@
  
-import React, { useState } from 'react';
-import { Dimensions,  StyleSheet, Text, View, Image, ScrollView } from 'react-native';  
+import * as React from 'react';
+import { Dimensions,  StyleSheet, Text, View, Image, Button } from 'react-native';  
 import { globalStyles } from './styles/global'; 
+//
+import AsyncStorage from '@react-native-async-storage/async-storage';  
+import { AuthContext } from "./utils";
 
-export default function Credencial ({ route, navigation }) {
-
+export default function Credencial ({route, navigation}) {
+  
+ 
   const { 
     numAfiliado, 
     nombrePersona, 
     fingresoAfiliado, 
     documentoPersona, 
-    rs_emp 
-  } = route.params;
+    rs_emp,
+  } = route.params; 
+  
 
   function getParsedDate(date){
     date = String(date).split(' ');
@@ -65,6 +70,7 @@ export default function Credencial ({ route, navigation }) {
               <Text style={styles.text} > F. INGRESO: {fechaIngreso} </Text>
               <Text style={styles.text} > D.N.I: {documentoPersona} </Text>
               <Text style={styles.text} > EMPRESA: {rs_emp} </Text>
+              
             </View>
 
             <Image
@@ -73,7 +79,7 @@ export default function Credencial ({ route, navigation }) {
               />  
 
         </View>
-         
+ 
     </View>
   ); 
     

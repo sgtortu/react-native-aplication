@@ -22,7 +22,7 @@ export const globalStyles = StyleSheet.create({
       color: 'red',
       marginBottom: 10, 
       marginTop: -10,
-      fontSize: 12,
+      fontSize: 12, 
     },
     preloader: {
       left: 0,
@@ -50,19 +50,19 @@ export const globalStyles = StyleSheet.create({
       color:'#043464',
       textAlign: 'center',
       marginTop: 15,  
-      marginBottom: 45
+      marginBottom: 45, 
     },
     h4: {      
       fontSize: 16,
       color:'#043464', 
       marginTop: 5,  
-      marginBottom: 5
+      marginBottom: 5, 
     },
     h6: {      
       fontSize: 12,
       color:'#043464', 
       marginTop: 0,  
-      marginBottom: 1
+      marginBottom: 1, 
     },
     inline: { 
       alignSelf: "center",
@@ -71,6 +71,18 @@ export const globalStyles = StyleSheet.create({
       width: '80%', 
       marginBottom: 15,
       marginTop:15
-    }
+    },
+    inputUsername: {  
+      width: '100%',
+      marginBottom: 15,
+      paddingBottom: 5,
+      alignSelf: "center",
+      borderColor: "#ccc",
+      borderBottomWidth: 1,
+      textTransform: 'lowercase'
+    }, 
+    separator: {
+      marginTop: 15
+  }
   });
  

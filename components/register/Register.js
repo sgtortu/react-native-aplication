@@ -204,7 +204,7 @@ export default function Register ({ route, navigation }) {
               console.log('Bien:', data.response.insertId);  
               if (data.response.insertId) {
                 alert("Registrado correctamente.")     
-                navigation.navigate('Ingresar')
+                navigation.navigate('Login')
               }  else {
                 setValidateUsername({
                   msg: data.response,
@@ -297,7 +297,7 @@ export default function Register ({ route, navigation }) {
           {/* Username */}
           <Text style={ globalStyles.h6}>Nombre de usuario</Text>
           <TextInput
-            style={ globalStyles.inputStyle}
+            style={ globalStyles.inputUsername}
             placeholder="Nombre de usuario"
             maxLength={20}
             value={ username}
@@ -396,10 +396,11 @@ const styles = StyleSheet.create({
   background: {
       backgroundColor: '#f5f5f5',
       padding: 10,
-      marginTop: -15,
+      marginTop: 15,
       marginBottom: 5,
   },
   button: {  
     marginTop: 0
   }, 
+
 });

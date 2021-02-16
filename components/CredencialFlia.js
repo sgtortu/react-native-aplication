@@ -1,10 +1,11 @@
  
 import React, { useState } from 'react';
-import { Dimensions,  StyleSheet, Text, View, Image, ScrollView } from 'react-native';  
+import { Button, Dimensions,  StyleSheet, Text, View, Image, ScrollView } from 'react-native';  
 import { globalStyles } from './styles/global'; 
+import { AuthContext } from "./utils";
 
-export default function Credencial ({ route, navigation }) {
-
+export default function Credencial ({route, navigation}) {
+    
   const { 
     numAfiliado, 
     nombrePersona, 
@@ -13,9 +14,7 @@ export default function Credencial ({ route, navigation }) {
     rs_emp, 
     parentescoAfiliadoflia,
     nombrePersonaTitular
-  } = route.params;
-  
-
+  } = route.params; 
 
   function getParsedDate(date){
     date = String(date).split(' ');
@@ -64,8 +63,9 @@ export default function Credencial ({ route, navigation }) {
 
   La pantalla va horizontal, por lo tanto en Widht lleva el valor de Height y viceversa.
   
-  */
- 
+  */ 
+
+  
   return (
 
     <View style={ styles.container }>  
@@ -79,7 +79,7 @@ export default function Credencial ({ route, navigation }) {
 
             <View style={   {marginTop:paddingTextPercent, marginBottom:paddingTextPercent, marginLeft:paddingTextPercent*3 }    }> 
               <Text style={styles.text} > N॰ DE AFILIADO:  {numAfiliado} </Text>   
-              <Text style={styles.text} > AFILIADO: {nombrePersona} </Text>
+              <Text style={styles.text} > AFILIADO: { nombrePersona } </Text>
               <Text style={styles.text} > F. INGRESO: {fechaIngreso} </Text>
               <Text style={styles.text} > D.N.I: {documentoPersona} </Text>
               <Text style={styles.text} > EMPRESA: {rs_emp} </Text>
@@ -92,8 +92,7 @@ export default function Credencial ({ route, navigation }) {
               source={require('../assets/images/afi-titular-footer.png')}
               />  
 
-        </View>
-         
+        </View> 
     </View>
   ); 
     
@@ -113,7 +112,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color:'#000',  
     marginTop: 2,  
-    marginBottom: 2, 
+    marginBottom: 2,  
   },  
 });
 

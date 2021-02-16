@@ -87,7 +87,8 @@ export default function changePassword ({ route, navigation }) {
             title="Enviar"    
           ></Button>
         </View>
-
+        <View style={globalStyles.separator} />
+        <View style={globalStyles.separator} />
         <Text style={globalStyles.h4}>Recibira su nueva contraseña via email.</Text>
         <Text style={globalStyles.h6}>Si no lo recibe, revise los spam.</Text>
 

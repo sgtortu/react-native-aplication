@@ -1,25 +1,30 @@
  
-import React, { useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { StyleSheet, Button, Text, View, TextInput, ScrollView, TouchableHighlight } from 'react-native';  
-import { globalStyles } from './styles/global';
+import { globalStyles } from './styles/global'; 
+import { AuthContext } from "./utils";
 
 export default function Login({ route, navigation }) { 
    
+  console.log('navigation: ', navigation)
+
+  
+  const { signIn } = React.useContext(AuthContext);
 
   
   const [dataUser, setDataUser] = useState({  
-    username: 'vemos',
-    password: '42400448', 
+    //username: 'Prueba1jdjdj', 
+    username: 'Jjjjjjjjj',
+    password: 'Vl4322', 
   });
   const [idUser, setIdUser] = useState('');
   const [validateUsername, setValidateUsername] = useState(true);
   const [validatePassword, setValidatePassword] = useState(true); 
   const [loadDataRegister, setLoadDataRegister] = useState(true); 
   const [validateAll, setValidateAll] =  useState({  state: false, msg: "" });   
-  
+ 
+  let clickSend = () => { 
 
-  
-  let clickSend = () => {
     // Validaciones
     if (   username.trim() === "" ||  password.trim() === ""  ) {
         setValidateUsername(false)
@@ -35,34 +40,35 @@ export default function Login({ route, navigation }) {
         const contentType = response.headers.get('content-type'); 
         return response.json();
       })
-      .then(data => {
-        //console.log(data.response[1][0].nombrePersona)
+      .then(data => { 
         if(data.response.length === 1) {
           setValidateAll({ state:false, msg:data.response[0]})      
-        } else {
-          if (data.response[0].afiliadoTitular) {
-            // navigate credencial titular
-            const { 
-              numAfiliado,
-              nombrePersona,  
-              fingresoAfiliado,
-              documentoPersona,  
-              rs_emp, 
-            } = data.response[1][0];
-            navigation.navigate('Credencial',{numAfiliado: numAfiliado, nombrePersona: nombrePersona, fingresoAfiliado: fingresoAfiliado, documentoPersona: documentoPersona, rs_emp: rs_emp })
-          } else {
-            // navigate credencial adherente 
-            const { 
-              numAfiliado,
-              nombrePersona,  
-              fingresoAfiliado,
-              documentoPersona,  
-              rs_emp, 
-              parentescoAfiliadoflia,
-              nombrePersonaTitular
-            } = data.response[1][0];
-            navigation.navigate('CredencialFlia',{numAfiliado: numAfiliado, nombrePersona: nombrePersona, fingresoAfiliado: fingresoAfiliado, documentoPersona: documentoPersona, rs_emp: rs_emp, parentescoAfiliadoflia: parentescoAfiliadoflia , nombrePersonaTitular: nombrePersonaTitular })
-          }
+        } else { 
+          console.log('data.response[1][0]: ', data.response[1][0])
+          signIn(data.response[1][0])
+          // if (data.response[0].afiliadoTitular) { 
+          //   // navigate credencial titular
+          //   const { 
+          //     numAfiliado,
+          //     nombrePersona,  
+          //     fingresoAfiliado,
+          //     documentoPersona,  
+          //     rs_emp, 
+          //   } = data.response[1][0];
+          //   navigation.navigate('Credencial',{numAfiliado: numAfiliado, nombrePersona: nombrePersona, fingresoAfiliado: fingresoAfiliado, documentoPersona: documentoPersona, rs_emp: rs_emp })
+          // } else {
+          //   // navigate credencial adherente 
+          //   const { 
+          //     numAfiliado,
+          //     nombrePersona,  
+          //     fingresoAfiliado,
+          //     documentoPersona,  
+          //     rs_emp, 
+          //     parentescoAfiliadoflia,
+          //     nombrePersonaTitular
+          //   } = data.response[1][0];
+          //   navigation.navigate('CredencialFlia',{numAfiliado: numAfiliado, nombrePersona: nombrePersona, fingresoAfiliado: fingresoAfiliado, documentoPersona: documentoPersona, rs_emp: rs_emp, parentescoAfiliadoflia: parentescoAfiliadoflia , nombrePersonaTitular: nombrePersonaTitular })
+          // }
         }
       })
       .catch(error => console.error(error),
@@ -93,7 +99,8 @@ export default function Login({ route, navigation }) {
 
 
       <TextInput  
-        style={ globalStyles.inputStyle}
+        autoCapitalize='none'
+        style={ globalStyles.inputUsername}
         placeholder="Nombre de usuario"
         maxLength={20}
         value={ username}
@@ -110,6 +117,7 @@ export default function Login({ route, navigation }) {
       {  validateUsername ? null : <Text style={ globalStyles.msgError}>Usuario no registrado</Text>}
       
       <TextInput
+        autoCapitalize='none'
         style={ globalStyles.inputStyle}
         placeholder="Contraseña"
         value={ password}
@@ -142,7 +150,10 @@ export default function Login({ route, navigation }) {
         <Text style={ globalStyles.buttonText} >¿Has olvidado la contraseña?</Text>
       </TouchableHighlight>
 
+      <View style={globalStyles.separator} />
+
       <Text style={globalStyles.inline}>  </Text>
+      <View style={styles.separator} />
   
       <Button 
         style={ styles.buttonSmall }
@@ -155,10 +166,15 @@ export default function Login({ route, navigation }) {
     
   </View>
   ) 
+
+
+
+
+   
 }
 
 const styles = StyleSheet.create({  
-  // margin: {
-  //     marginTop: 15
-  // }
+  separator: {
+      marginTop: 15
+  }
 });

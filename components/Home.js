@@ -46,6 +46,12 @@ export default function Home({route, navigation}) {
         /> 
         <View style={styles.separator} />
         <Button
+            color="#043464"     
+            onPress={() =>  navigation.navigate('InfoDni',route.params) }
+            title="Datos personales"
+        /> 
+        <View style={styles.separator} />
+        <Button
             color="#0474D6"   
             onPress={closeSession}
             title="Cerrar sesiÓn"

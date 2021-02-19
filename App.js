@@ -7,6 +7,7 @@ import {AuthContext}  from "./components/utils";
 import Credencial from "./components/Credencial";
 import CredencialFlia from './components/CredencialFlia';
 import Home from './components/Home';
+import InfoDni from './components/InfoDni';
 // AuthScreen
 import  Login from "./components/Login";
 import  Register from "./components/register/Register";
@@ -31,6 +32,7 @@ function AuthStack({route}) {
         <StackAuth.Screen name="Home" initialParams={route.params} component={Home} options={{title:'Inicio'}} /> 
         <StackAuth.Screen name="Credencial" component={Credencial}                  options={{title:'Tu credencial'}} /> 
         <StackAuth.Screen name="CredencialFlia" component={CredencialFlia}          options={{title:'Tu credencial'}} /> 
+        <StackAuth.Screen name="InfoDni" component={InfoDni}                        options={{title:''}} /> 
       </>
       :
       <>

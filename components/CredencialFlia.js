@@ -1,9 +1,8 @@
  
 import React, { useState } from 'react';
-import { Button, Dimensions,  StyleSheet, Text, View, Image, ScrollView } from 'react-native';  
-import { globalStyles } from './styles/global'; 
-import { AuthContext } from "./utils";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {  Dimensions,  StyleSheet, Text, View, Image } from 'react-native';  
+import { API_URL } from "../config";
+
 
 export default function Credencial ({route, navigation}) {
  
@@ -20,7 +19,7 @@ export default function Credencial ({route, navigation}) {
   } = route.params; 
    
   React.useEffect(() => { 
-    fetch(`http://192.168.0.7:3000/pdf417/${documentoPersona}`).then(response => {
+    fetch(`${API_URL}pdf417/${documentoPersona}`).then(response => {
       const contentType = response.headers.get('content-type'); 
       return response.json();
     })

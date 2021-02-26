@@ -2,11 +2,12 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native';  
 import { globalStyles } from './styles/global'; 
+import { API_URL } from "../config";
 
 export default function changePassword ({ route, navigation }) {
 
   const [dataUser, setDataUser] = useState({  
-    email: 's.tortu@itecriocuarto.org.ar' 
+    email: '' 
   });
   const { email } = dataUser;
   const [validateEmail, setValidateEmail] = useState({  state: true, msg: "" }); 
@@ -29,7 +30,7 @@ export default function changePassword ({ route, navigation }) {
     }  
           
     // Post send-email
-    fetch(`http://192.168.0.7:3000/send-email`, {
+    fetch(`${API_URL}send-email`, {
       method: 'POST', // or 'PUT'
       headers: {
         'Content-Type': 'application/json',

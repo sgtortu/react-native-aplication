@@ -1,9 +1,9 @@
  
 import React, { useState } from 'react';
-import { StyleSheet, Dimensions,Text, View,  ScrollView, Button, ViewBase } from 'react-native';  
+import { StyleSheet, Dimensions,Text, View,  ScrollView, Button } from 'react-native';  
 import RNPickerSelect from 'react-native-picker-select';
 import { globalStyles } from '../styles/global';
-//import config from "../../config";
+
 
 export default function Family ({ route, navigation }) { 
   

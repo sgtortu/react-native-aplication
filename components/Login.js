@@ -1,14 +1,16 @@
  
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Button, Text, View, TextInput, ScrollView, TouchableHighlight } from 'react-native';  
 import { globalStyles } from './styles/global'; 
 import { AuthContext } from "./utils";
 import AsyncStorage from '@react-native-async-storage/async-storage';  
+import { API_URL } from "../config";
+import { useEffect } from 'react/cjs/react.development';
 
 export default function Login({ route, navigation }) {  
   
   const { signIn } = React.useContext(AuthContext);
-
+   
   const storeData = async (value) => {
     try {
       await AsyncStorage.setItem('veces', value.toString())
@@ -39,6 +41,7 @@ export default function Login({ route, navigation }) {
     }
     
 
+
     if (validatePassword && validateUsername){
       
       setValidateAll({ state:true, msg:false})    
@@ -48,6 +51,7 @@ export default function Login({ route, navigation }) {
         return response.json();
       })
       .then(data => { 
+        console.log('data-   ',data)
         if(data.response.length === 1) {
           setValidateAll({ state:false, msg:data.response[0]})      
         } else { 

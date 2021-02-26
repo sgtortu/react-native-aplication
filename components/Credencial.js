@@ -1,10 +1,8 @@
  
 import React, { useState } from 'react'; 
 import { Dimensions,  StyleSheet, Text, View, Image, Button } from 'react-native';  
-import { globalStyles } from './styles/global'; 
-//
-import AsyncStorage from '@react-native-async-storage/async-storage';  
-import { AuthContext } from "./utils";
+import { API_URL } from "../config";
+
 
 export default function Credencial ({route, navigation}) {
   
@@ -20,7 +18,7 @@ export default function Credencial ({route, navigation}) {
   const [imgPdf417, setimgPdf417] = useState(false); 
    
   React.useEffect(() => { 
-    fetch(`http://192.168.0.7:3000/pdf417/${documentoPersona}`).then(response => {
+    fetch(`${API_URL}pdf417/${documentoPersona}`).then(response => {
       const contentType = response.headers.get('content-type'); 
       return response.json();
     })

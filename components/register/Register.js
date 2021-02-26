@@ -1,7 +1,8 @@
  
 import React, { useState } from 'react';
-import { StyleSheet, Button, Text, View, TextInput, ScrollView, TouchableHighlight } from 'react-native';  
+import { StyleSheet, Button, Text, View, TextInput, ScrollView } from 'react-native';  
 import { globalStyles } from '../styles/global';
+import { API_URL } from "../../config";
 
 export default function Register ({ route, navigation }) { 
 
@@ -192,7 +193,7 @@ export default function Register ({ route, navigation }) {
           setTimeout(() => {
             
             // Post a usuario y Put a persona
-            fetch(`http://192.168.0.7:3000/registrar`, {
+            fetch(`${API_URL}registrar`, {
               method: 'POST', // or 'PUT'
               headers: {
                 'Content-Type': 'application/json',

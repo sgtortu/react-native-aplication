@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React from 'react';
 import { StyleSheet, Button, Text, View, Image, ScrollView  } from 'react-native';
 import { globalStyles } from '../styles/global';
 

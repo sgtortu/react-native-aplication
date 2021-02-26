@@ -3,13 +3,12 @@
 import React,  { useState, useEffect }  from 'react';
 import { Dimensions, Button, Text, View ,StyleSheet} from 'react-native'; 
 import { BarCodeScanner } from 'expo-barcode-scanner'; 
-import config from "../../config";
-import { color } from 'react-native-reanimated';
+import { API_URL } from "../../config";
 
 const { width } = Dimensions.get('window');
 
 export default function Scanner({ route,navigation }) {  
-  console.log('config: ',config) 
+  
   const { parentesco } = route.params; 
 
   // Cuil
@@ -55,15 +54,15 @@ export default function Scanner({ route,navigation }) {
 
 
 
-    const [hasPermission, setHasPermission] = useState(null);
+    //const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
 
-  useEffect(() => {
-    (async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const { status } = await BarCodeScanner.requestPermissionsAsync();
+  //     setHasPermission(status === 'granted');
+  //   })();
+  // }, []);
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
@@ -97,7 +96,7 @@ export default function Scanner({ route,navigation }) {
       if (parentesco == 'A') { // Si es afiliado TITULAR...
         console.log('entre en SI afiliadoflia')
         // Start fetch
-        fetch(`http://192.168.0.7:3000/usuarios/${dni}`).then((response) => {
+        fetch(`${API_URL}usuarios/${dni}`).then((response) => {
           if (response.ok) {
             return response.json();
           } else {
@@ -131,7 +130,7 @@ export default function Scanner({ route,navigation }) {
           console.log('entre en NO afiliadoflia')
 
           // Start fetch persona - afiliado - usuarioactivo
-          fetch(`http://192.168.0.7:3000/personaAfiliadoUsuario/${dni}`).then((response) => {
+          fetch(`${API_URL}personaAfiliadoUsuario/${dni}`).then((response) => {
             if (response.ok) {
               return response.json();
             } else {
@@ -166,12 +165,12 @@ export default function Scanner({ route,navigation }) {
   
   };
 
-  if (hasPermission === null) {
-    return <Text>Esperando permiso a la camara...</Text>;
-  }
-  if (hasPermission === false) {
-    return <Text>No hay acceso a la camara.</Text>;
-  } 
+  // if (hasPermission === null) {
+  //   return <Text>Esperando permiso a la camara...</Text>;
+  // }
+  // if (hasPermission === false) {
+  //   return <Text>No hay acceso a la camara.</Text>;
+  // } 
   return (
  
     <View style={styles.container}>

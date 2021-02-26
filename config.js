@@ -1,5 +1,4 @@
-import { API_URL } from "@env";
+//import { API_URL } from "@env";
 
-export default {
-    API_URL,
-};
+export const API_URL = 'http://64.225.47.18:8080/';
+

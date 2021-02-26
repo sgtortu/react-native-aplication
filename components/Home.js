@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React  from 'react';
 import { StyleSheet, Button, Text, View, Image, Alert  } from 'react-native';
 import { globalStyles } from './styles/global';
 import { AuthContext } from "./utils";

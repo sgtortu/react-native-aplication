@@ -8,7 +8,7 @@ import config from "../../config";
 const { width } = Dimensions.get('window');
 
 export default function Scanner({ route,navigation }) {  
-
+  console.log('config: ',config) 
   const { parentesco } = route.params; 
 
   // Cuil

@@ -5,34 +5,31 @@ import { globalStyles } from './styles/global';
 import { AuthContext } from "./utils";
 import AsyncStorage from '@react-native-async-storage/async-storage';  
 
-export default function Login({ route, navigation }) { 
-   
-  console.log('navigation: ', navigation)
-
+export default function Login({ route, navigation }) {  
   
   const { signIn } = React.useContext(AuthContext);
 
   const storeData = async (value) => {
     try {
       await AsyncStorage.setItem('veces', value.toString())
-      console.log('Bien Man:')
+      console.log('Bien AsyncStorage:')
 
     } catch (e) {
       // saving error
-      console.log('Error Man:')
+      console.log('Error AsyncStorage:')
     }
   }
   
   const [dataUser, setDataUser] = useState({  
     //username: 'Prueba1jdjdj', 
     username: 'Jjjjjjjjj',
-    password: 'Vl4322', 
-  });
-  const [idUser, setIdUser] = useState('');
+    password: 'Vl4322',  
+  }); 
   const [validateUsername, setValidateUsername] = useState(true);
   const [validatePassword, setValidatePassword] = useState(true); 
   const [loadDataRegister, setLoadDataRegister] = useState(true); 
   const [validateAll, setValidateAll] =  useState({  state: false, msg: "" });   
+ 
  
   let clickSend = () => { 
 
@@ -55,32 +52,8 @@ export default function Login({ route, navigation }) {
         if(data.response.length === 1) {
           setValidateAll({ state:false, msg:data.response[0]})      
         } else { 
-          console.log('data.response[1][0]: ', data.response[1][0])
           signIn(data.response[1][0])
-          storeData(0)
-          // if (data.response[0].afiliadoTitular) { 
-          //   // navigate credencial titular
-          //   const { 
-          //     numAfiliado,
-          //     nombrePersona,  
-          //     fingresoAfiliado,
-          //     documentoPersona,  
-          //     rs_emp, 
-          //   } = data.response[1][0];
-          //   navigation.navigate('Credencial',{numAfiliado: numAfiliado, nombrePersona: nombrePersona, fingresoAfiliado: fingresoAfiliado, documentoPersona: documentoPersona, rs_emp: rs_emp })
-          // } else {
-          //   // navigate credencial adherente 
-          //   const { 
-          //     numAfiliado,
-          //     nombrePersona,  
-          //     fingresoAfiliado,
-          //     documentoPersona,  
-          //     rs_emp, 
-          //     parentescoAfiliadoflia,
-          //     nombrePersonaTitular
-          //   } = data.response[1][0];
-          //   navigation.navigate('CredencialFlia',{numAfiliado: numAfiliado, nombrePersona: nombrePersona, fingresoAfiliado: fingresoAfiliado, documentoPersona: documentoPersona, rs_emp: rs_emp, parentescoAfiliadoflia: parentescoAfiliadoflia , nombrePersonaTitular: nombrePersonaTitular })
-          // }
+          storeData(0)        
         }
       })
       .catch(error => console.error(error),

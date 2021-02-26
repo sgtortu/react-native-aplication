@@ -1,9 +1,8 @@
  
 import React, { useState } from 'react';
-import { StyleSheet, Text, View,  ScrollView, Button } from 'react-native';  
+import { StyleSheet, Dimensions,Text, View,  ScrollView, Button, ViewBase } from 'react-native';  
 import RNPickerSelect from 'react-native-picker-select';
 import { globalStyles } from '../styles/global';
-
 //import config from "../../config";
 
 export default function Family ({ route, navigation }) { 
@@ -12,6 +11,8 @@ export default function Family ({ route, navigation }) {
     const [parentesco, setparentesco] =  useState('A');  
     const [msgErrorParentesco, setmsgErrorParentesco] = useState({  state: false, msg: "" }); 
     
+    const windowWidth = Dimensions.get('window').width;
+    const windowHeight = Dimensions.get('window').height;
     // Click continuar
     let clickContinue = () => {
          
@@ -53,11 +54,14 @@ export default function Family ({ route, navigation }) {
                 {  msgErrorParentesco.state ? <Text style= {globalStyles.msgError}> {msgErrorParentesco.msg} </Text> : null}
                   
                 <Text style= {styles.margin}></Text>
-                <Button                                     
-                  onPress={() => { clickContinue() }}                      
-                  title='Continuar'
-                  color='#043464'
-                  > </Button>
+                
+                <View style={styles.buttonPosition}>
+                  <Button                                     
+                    onPress={() => { clickContinue() }}                      
+                    title='Continuar'
+                    color='#043464'
+                    > </Button>
+                </View>
                  
             </ScrollView>
         </View>
@@ -70,5 +74,7 @@ const styles = StyleSheet.create({
   margin: {
     marginTop: 20, 
   }, 
-
+  buttonPosition: {
+    marginBottom: 0, 
+  }, 
 });

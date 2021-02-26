@@ -3,9 +3,12 @@ import React, { useState } from 'react';
 import { Button, Dimensions,  StyleSheet, Text, View, Image, ScrollView } from 'react-native';  
 import { globalStyles } from './styles/global'; 
 import { AuthContext } from "./utils";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Credencial ({route, navigation}) {
-    
+ 
+  const [imgPdf417, setimgPdf417] = useState(null); 
+
   const { 
     numAfiliado, 
     nombrePersona, 
@@ -15,6 +18,20 @@ export default function Credencial ({route, navigation}) {
     parentescoAfiliadoflia,
     nombrePersonaTitular
   } = route.params; 
+   
+  React.useEffect(() => { 
+    fetch(`http://192.168.0.7:3000/pdf417/${documentoPersona}`).then(response => {
+      const contentType = response.headers.get('content-type'); 
+      return response.json();
+    })
+    .then(data => { 
+        console.log('ok------> ',data.response[0]); 
+        setimgPdf417(data.response[0]);
+    })
+    .catch(error => console.error(error),  
+    );
+  },[])
+
 
   function getParsedDate(date){
     date = String(date).split(' ');
@@ -50,12 +67,12 @@ export default function Credencial ({route, navigation}) {
 
   // console.log('----: ' );
 
-  // console.log(`W = ${windowWidth} - ${widthPercent}%`) 
-  // console.log(`H = ${windowHeight} - ${heightPercent}%`)  
-  // console.log(`paddingPercent = ${paddingPercent}%`)  
-  // console.log(`paddingTextPercent = ${paddingTextPercent}%`)  
+  console.log(`W = ${windowWidth} - ${widthPercent}%`) 
+  console.log(`H = ${windowHeight} - ${heightPercent}%`)  
+  console.log(`paddingPercent = ${paddingPercent}%`)  
+  console.log(`paddingTextPercent = ${paddingTextPercent}%`)  
 
- 
+  let restante = windowHeight - heightPercent;
  
   /*
   
@@ -68,31 +85,42 @@ export default function Credencial ({route, navigation}) {
   
   return (
 
-    <View style={ styles.container }>  
- 
+    <View style={ styles.container }>   
+    <View style={ {marginTop:0} }>
         <View style={   { height:windowWidth, width:windowHeight },styles.card    }> 
 
             <Image
-              style={{height:widthPercent , width:heightPercent}}
+              style={{height:widthPercent , width:heightPercent-heightPercent/10}}
               source={require('../assets/images/afi-adherente-header.png')}
               />  
 
             <View style={   {marginTop:paddingTextPercent, marginBottom:paddingTextPercent, marginLeft:paddingTextPercent*3 }    }> 
-              <Text style={styles.text} > N॰ DE AFILIADO:  {numAfiliado} </Text>   
               <Text style={styles.text} > AFILIADO: { nombrePersona } </Text>
-              <Text style={styles.text} > F. INGRESO: {fechaIngreso} </Text>
-              <Text style={styles.text} > D.N.I: {documentoPersona} </Text>
-              <Text style={styles.text} > EMPRESA: {rs_emp} </Text>
-              <Text style={styles.text} > PARENTESCO: {parentesco} </Text>
               <Text style={styles.text} > AFILIADO TITULAR: {nombrePersonaTitular} </Text>
+              <Text style={styles.text} > EMPRESA: {rs_emp} </Text>
+              <Text style={styles.text} > F. INGRESO: {fechaIngreso} </Text>
+              <Text style={styles.text} > N॰ DE AFILIADO:  {numAfiliado} </Text>   
+              <Text style={styles.text} > D.N.I: {documentoPersona} </Text>
+              <Text style={styles.text} > PARENTESCO: {parentesco} </Text>
             </View>
 
-            <Image
-              style={{height:widthPercent, width:heightPercent}}
-              source={require('../assets/images/afi-titular-footer.png')}
-              />  
-
-        </View> 
+            <View style={styles.footer}>
+              <Image
+                style={{height:widthPercent, width:heightPercent-heightPercent/10}}
+                source={require('../assets/images/afi-titular-footer.png')}
+                />  
+            </View>
+        </View>  
+        <View style={styles.ubicacionPdf417}> 
+        
+              <View style={ {marginLeft:windowWidth/4,marginBottom:-windowWidth/5} }>
+                <Text style={styles.textPdf417} > Identificarse: </Text>
+                <Image style={ {width: windowWidth/2.5, height:windowHeight/8} } source={{uri: imgPdf417}}/>
+              </View>
+                
+              
+          </View>
+        </View>
     </View>
   ); 
     
@@ -106,13 +134,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   }, 
   card: { 
-    transform: [{ rotate: '90deg'}],   
+    transform: [{ rotate: '90deg'}],  
+    backgroundColor: '#f9f9f9' 
+  }, 
+  ubicacionPdf417: {  
+    transform: [{ rotate: '90deg'}],       
   }, 
   text: { 
     fontSize: 16,
     color:'#000',  
     marginTop: 2,  
     marginBottom: 2,  
+  },  
+  textPdf417: { 
+    fontSize: 12,
+    color:'#000',  
+    marginTop: 2,  
+    marginBottom: 2,  
+  },  
+  footer: {     
+    alignItems: 'center',
+    justifyContent: 'center',
   },  
 });
 

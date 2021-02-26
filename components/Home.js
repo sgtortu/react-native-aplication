@@ -44,12 +44,7 @@ export default function Home({route, navigation}) {
             onPress={() =>  { nombrePersonaTitular ? navigation.navigate('CredencialFlia',route.params) : navigation.navigate('Credencial',route.params) } }
             title="Ver mi credencial"
         /> 
-        <View style={styles.separator} />
-        <Button
-            color="#043464"     
-            onPress={() =>  navigation.navigate('InfoDni',route.params) }
-            title="Datos personales"
-        /> 
+        <View style={styles.separator} />  
         <View style={styles.separator} />
         <Button
             color="#0474D6"   

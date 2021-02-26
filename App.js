@@ -7,7 +7,6 @@ import {AuthContext}  from "./components/utils";
 import Credencial from "./components/Credencial";
 import CredencialFlia from './components/CredencialFlia';
 import Home from './components/Home';
-import InfoDni from './components/InfoDni';
 // AuthScreen
 import  Login from "./components/Login";
 import  Register from "./components/register/Register";
@@ -32,7 +31,6 @@ function AuthStack({route}) {
         <StackAuth.Screen name="Home" initialParams={route.params} component={Home} options={{title:'Inicio'}} /> 
         <StackAuth.Screen name="Credencial" component={Credencial}                  options={{title:'Tu credencial'}} /> 
         <StackAuth.Screen name="CredencialFlia" component={CredencialFlia}          options={{title:'Tu credencial'}} /> 
-        <StackAuth.Screen name="InfoDni" component={InfoDni}                        options={{title:''}} /> 
       </>
       :
       <>
@@ -73,11 +71,11 @@ export default function App({ navigation }) {
   const storeData = async (value) => {
     try {
       await AsyncStorage.setItem('veces', value.toString())
-      console.log('RE Bien Man:')
+      //console.log('Bien 'veces':')
 
     } catch (e) {
       // saving error
-      console.log('RE Error Man:')
+      //console.log('Error en 'veces':')
     }
   }
 
@@ -132,7 +130,7 @@ export default function App({ navigation }) {
       // screen will be unmounted and thrown away.
       let veces = await getData();
       storeData(Number(veces)+1);
-      if (veces > 4) {
+      if (veces > 9) {
         authContext.signOut();
         storeData(0);
       }else{

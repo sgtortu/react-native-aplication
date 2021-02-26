@@ -4,6 +4,7 @@ import React,  { useState, useEffect }  from 'react';
 import { Dimensions, Button, Text, View ,StyleSheet} from 'react-native'; 
 import { BarCodeScanner } from 'expo-barcode-scanner'; 
 import config from "../../config";
+import { color } from 'react-native-reanimated';
 
 const { width } = Dimensions.get('window');
 
@@ -186,8 +187,9 @@ export default function Scanner({ route,navigation }) {
         </View>
         <View style={styles.layerBottom} />
       </BarCodeScanner>
-      
-      {scanned && <Button title={'Toca para escanear nuevamente.'} onPress={() => setScanned(false)} />}
+      <View style={styles.card}> 
+          {scanned && <Button color="#043464" title={'Volver a escanear'} onPress={() => setScanned(false)} />}
+      </View>
     </View>
 
   )
@@ -222,5 +224,11 @@ const styles = StyleSheet.create({
   layerBottom: {
     flex: 2,
     backgroundColor: opacity
+  },
+  buttonP: { 
+    
+  },
+  card: { 
+     marginTop: 250,   
   },
 });

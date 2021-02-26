@@ -55,15 +55,15 @@ export default function Family ({ route, navigation }) {
                   
                 <Text style= {styles.margin}></Text>
                 
-                <View style={styles.buttonPosition}>
-                  <Button                                     
-                    onPress={() => { clickContinue() }}                      
-                    title='Continuar'
-                    color='#043464'
-                    > </Button>
-                </View>
                  
             </ScrollView>
+            <View style={globalStyles.buttonPosition}> 
+              <Button                                     
+                onPress={() => { clickContinue() }}                      
+                title='Continuar'
+                color='#043464'
+                > </Button>
+            </View>
         </View>
     ); 
     
@@ -73,8 +73,5 @@ const styles = StyleSheet.create({
    
   margin: {
     marginTop: 20, 
-  }, 
-  buttonPosition: {
-    marginBottom: 0, 
-  }, 
+  },  
 });

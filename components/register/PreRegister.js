@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { StyleSheet, Button, Text, View, Image  } from 'react-native';
+import { StyleSheet, Button, Text, View, Image, ScrollView  } from 'react-native';
 import { globalStyles } from '../styles/global';
 
 export default function PreRegister({ route,navigation }) { 
@@ -50,31 +50,34 @@ export default function PreRegister({ route,navigation }) {
 
     return (
         <View style={ globalStyles.container}>
+            <ScrollView>
           
-            <Text style={ globalStyles.h1} > Registrarte</Text>
-            <Text style={ styles.h4} > Debe escanear su DNI para continuar.</Text>
-            
+              <Text style={ globalStyles.h1} > Registrarte</Text>
+              <Text style={ styles.h4} > Debe escanear su DNI para continuar.</Text>
+              
 
-            {/* require('../assets/images/logo.png')
-              <Image
-                  style={ styles.image}
-                  source={{
-                    uri: 'https://emigrante.com.ve/wp-content/uploads/2018/04/DNI-Argentina.jpg',
-                  }}
-              />
-            */}
-              <Image
-                  style={styles.image }
-                  source={require('../../assets/images/codigo-dni.jpg')}
-              />       
-            <Button
-                style={ globalStyles.button}
-                color="#043464"  
-                testID="logoutButton"
-                onPress={() => navigation.navigate('Scanner', {parentesco:parentesco})}
-                title="Escanear DNI"
-            />
-            
+              {/* require('../assets/images/logo.png')
+                <Image
+                    style={ styles.image}
+                    source={{
+                      uri: 'https://emigrante.com.ve/wp-content/uploads/2018/04/DNI-Argentina.jpg',
+                    }}
+                />
+              */}
+                <Image
+                    style={styles.image }
+                    source={require('../../assets/images/codigo-dni.jpg')}
+                />       
+              </ScrollView>
+              <View style={globalStyles.buttonPosition}> 
+                <Button
+                    style={ globalStyles.button}
+                    color="#043464"  
+                    testID="logoutButton"
+                    onPress={() => navigation.navigate('Scanner', {parentesco:parentesco})}
+                    title="Escanear DNI"
+                />
+              </View>
         </View>
     );
 }

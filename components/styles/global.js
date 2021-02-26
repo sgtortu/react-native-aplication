@@ -83,6 +83,9 @@ export const globalStyles = StyleSheet.create({
     }, 
     separator: {
       marginTop: 15
-  }
+    },
+    buttonPosition: {
+      marginBottom: 25
+    }
   });
  

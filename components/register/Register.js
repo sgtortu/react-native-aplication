@@ -10,11 +10,11 @@ export default function Register ({ route, navigation }) {
  
     // Estado datos del formulario
     const [dataUser, setDataUser] = useState({  
-        email: 'blabla@gmail.com',
-        cellphone: '123456',
+        email: '',
+        cellphone: '',
         username: '',
-        password: '123456', 
-        passwordRepeat: '123456', 
+        password: '', 
+        passwordRepeat: '', 
       }); 
       
       // Estado de los ids  

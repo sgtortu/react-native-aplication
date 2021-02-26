@@ -20,10 +20,9 @@ export default function Login({ route, navigation }) {
     }
   }
   
-  const [dataUser, setDataUser] = useState({  
-    //username: 'Prueba1jdjdj', 
-    username: 'Jjjjjjjjj',
-    password: 'Vl4322',  
+  const [dataUser, setDataUser] = useState({    
+    username: '',
+    password: '',  
   }); 
   const [validateUsername, setValidateUsername] = useState(true);
   const [validatePassword, setValidatePassword] = useState(true); 
@@ -140,15 +139,17 @@ export default function Login({ route, navigation }) {
       <Text style={globalStyles.inline}>  </Text>
       <View style={styles.separator} />
   
-      <Button 
-        style={ styles.buttonSmall }
-        onPress={() => navigation.navigate('Family')}
-        title='Crear nueva cuenta'
-        color='#0474D4'
-        > </Button>
        
-    </ScrollView>
+      <View style={globalStyles.buttonPosition}> 
+        <Button 
+          style={ styles.buttonSmall }
+          onPress={() => navigation.navigate('Family')}
+          title='Crear nueva cuenta'
+          color='#0474D4'
+          > </Button>
+        </View>
     
+    </ScrollView>
   </View>
   ) 
 
@@ -161,5 +162,6 @@ export default function Login({ route, navigation }) {
 const styles = StyleSheet.create({  
   separator: {
       marginTop: 15
-  }
+  },
+  
 });

@@ -2,7 +2,7 @@
   "expo": {
     "name": "Sindicato de la carne",
     "slug": "credencial",
-    "version": "1.0.1",
+    "version": "4.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
     "splash": {
@@ -15,19 +15,18 @@
     },
     "assetBundlePatterns": [
       "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
+    ], 
     "android": {
-      "adaptiveIcon": {
+      "permissions" : ["CAMERA"],
+      "versionCode": 4,
+      "adaptiveIcon": { 
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.santiagotortu.test"
+      "package": "com.sindicato.test"
     },
     "web": {
-      "favicon": "./assets//imageslogo.png"
+      "favicon": "./assets/images/logo.png"
     }
   }
-}
+} 

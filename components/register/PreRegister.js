@@ -46,14 +46,14 @@ export default function PreRegister({ route,navigation }) {
       };
 
     // Ejemplo
-    console.log(getCUIT('a', 20516222));
+    //console.lo(getCUIT('a', 20516222));
 
     return (
         <View style={ globalStyles.container}>
             <ScrollView>
           
               <Text style={ globalStyles.h1} > Registrarte</Text>
-              <Text style={ styles.h4} > Debe escanear su DNI para continuar.</Text>
+              <Text style={ styles.h4} > Escaneé el código que aparece en su DNI</Text>
               
 
               {/* require('../assets/images/logo.png')
@@ -85,16 +85,15 @@ export default function PreRegister({ route,navigation }) {
 const styles = StyleSheet.create({ 
     image: {
         marginTop: 15,   
-        marginBottom: 55,    
-        
-         width: 290,
-         height: 70,
-        //display: 'flex',  
+        marginBottom: 55,            
+        width: 290,
+        height: 70,  
     },
     h4: {      
       fontSize: 17,
       color:'#043464', 
       marginTop: 5,  
-      marginBottom: 5
-    },
+      marginBottom: 5,
+      textAlign: "center"
+    },  
   });

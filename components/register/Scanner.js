@@ -1,22 +1,22 @@
 
 
 import React,  { useState, useEffect }  from 'react';
-import { Dimensions, Button, Text, View ,StyleSheet} from 'react-native'; 
+import { Dimensions, Button, Text, View ,StyleSheet, Alert} from 'react-native'; 
 import { BarCodeScanner } from 'expo-barcode-scanner'; 
 import { API_URL } from "../../config";
 
 const { width } = Dimensions.get('window');
 
-export default function Scanner({ route,navigation }) {  
+export default function Scanner({ route,navigation }) {   
   
   const { parentesco } = route.params; 
 
   // Cuil
   const getCUIT = (gender, dni) => {
         
-    console.log('dni: ',dni);
+    //console.log('dni: ',dni);
     dni = String(dni);
-    console.log('dni largo: ',dni.length);
+    //console.log('dni largo: ',dni.length);
 
     if (!dni || dni.length !== 8) {
        return alert('Algo anduvo mal');
@@ -52,24 +52,22 @@ export default function Scanner({ route,navigation }) {
     return `${genderNumber}-${dni}-${digitVerificator}`;
   };
 
+  const [hasPermission, setHasPermission] = useState(null);
+  const [scanned, setScanned] = useState(false);
 
-
-    //const [hasPermission, setHasPermission] = useState(null);
-    const [scanned, setScanned] = useState(false);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const { status } = await BarCodeScanner.requestPermissionsAsync();
-  //     setHasPermission(status === 'granted');
-  //   })();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
+  }, []);
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
  
     // Para separar al string que recibo
     let elements = data.split("@");
-    console.log('elements: ', elements)
+    //console.log('elements: ', elements)
     let dni,apellido,nombre,fnac,sexo = '';
     if (elements.length > 1) {      
       if (data[0] == '@') {
@@ -94,9 +92,9 @@ export default function Scanner({ route,navigation }) {
       
       // Comparar que el DNI del escaneo sea un AFILIADO ACTIVO 
       if (parentesco == 'A') { // Si es afiliado TITULAR...
-        console.log('entre en SI afiliadoflia')
+        //console.log('entre en SI afiliadoflia')
         // Start fetch
-        fetch(`${API_URL}usuarios/${dni}`).then((response) => {
+        fetch(`http://64.225.47.18:8080/usuarios/${dni}`).then((response) => {
           if (response.ok) {
             return response.json();
           } else {
@@ -105,21 +103,33 @@ export default function Scanner({ route,navigation }) {
         })
         .then((responseJson) => { 
           //alert('Ya puedes registrarte.')
-          console.log('resp: ', responseJson.response[0].idPersona) 
+          //console.log('resp: ', responseJson.response[0].idPersona) 
 
           if(responseJson.response[0].idPersona){
             let idpersona = responseJson.response[0].idPersona; 
             navigation.navigate('Register',{idpersona: idpersona,parentesco:parentesco, sexoScan: sexo, fnacScan: fnac, nombreScan: nombre, apellidoScan: apellido, dniScan: dni, cuilScan: cuilScan })
           
           } else {
-            console.log('Ya se registro (titular)');
-            alert('Ya te has registrado.') ;
+            //console.log('Ya se registro (titular)'); 
+            Alert.alert(
+              "Escaneo correcto.",
+              "Ya te has registrado."  
+            ); 
           } 
 
         })
         .catch((error) => {
-          console.log('Inhabilitado.')
-          alert('Inhabilitado.')  
+          //console.log('Inhabilitado.') 
+          Alert.alert('¿No eres afiliado titular?', 'Si eres familiar del afiliado titular, vuelva hacia atrás.',
+          [
+            {
+              text: "Cancelar",
+              //onPress: () => this.props.navigation.navigate("nextScreen"), 
+            },
+            {text: 'Volver', onPress: () => navigation.navigate("Family") },
+          ],
+          {cancelable: false}
+          ) 
         });
         // End fetch
 
@@ -127,10 +137,11 @@ export default function Scanner({ route,navigation }) {
 
       
       } else { // si NO es afiliado titular
-          console.log('entre en NO afiliadoflia')
+          //console.log('entre en NO afiliadoflia')
 
           // Start fetch persona - afiliado - usuarioactivo
-          fetch(`${API_URL}personaAfiliadoUsuario/${dni}`).then((response) => {
+          fetch(`http://64.225.47.18:8080/personaAfiliadoUsuario/${dni}`).then((response) => {
+          //fetch(`http://64.225.47.18:8080/personaAfiliadoUsuario/${dni}`).then((response) => {
             if (response.ok) {
               return response.json();
             } else {
@@ -138,39 +149,48 @@ export default function Scanner({ route,navigation }) {
             }
           })
           .then((responseJson) => {             
-            console.log('rj--> ',responseJson.response[0].idPersona)
+            //console.log('rj--> ',responseJson.response[0].idPersona)
 
             if(responseJson.response[0].idPersona){
               let idpersona = responseJson.response[0].idPersona;
-              console.log('idpersona---> ',idpersona)
+              //console.log('idpersona---> ',idpersona)
               navigation.navigate('Register',{idpersona: idpersona,parentesco: parentesco, sexoScan: sexo, fnacScan: fnac, nombreScan: nombre, apellidoScan: apellido, dniScan: dni, cuilScan: cuilScan })
             } else {
-              console.log('Ya se registro (familiar)');
-              alert('Ya te has registrado.') ;
+              //console.log('Ya se registro (familiar)'); 
+              Alert.alert(
+                "Escaneo correcto.",
+                "Ya te has registrado."  
+              ); 
             } 
 
 
           })
           .catch((error) => {
-            console.log('Inhabilitado');
-            alert('Inhabilitado.') ;
+            //console.log('Inhabilitado');
+            Alert.alert(
+              "Escaneo correcto.",
+              "Debes estar afiliado para continuar."  
+            ); 
           });
           // End fetch persona           
 
       }
             
     }else{
-      alert('No se ha identificado un DNI.');
+      Alert.alert(
+        "Vuelva a intentar.",
+        "No se ha identificado un código de DNI."  
+      );  
     }
   
   };
 
-  // if (hasPermission === null) {
-  //   return <Text>Esperando permiso a la camara...</Text>;
-  // }
-  // if (hasPermission === false) {
-  //   return <Text>No hay acceso a la camara.</Text>;
-  // } 
+  if (hasPermission === null) {
+    return <Text>Esperando permiso a la camara...</Text>;
+  }
+  if (hasPermission === false) {
+    return <Text>No hay acceso a la camara.</Text>;
+  } 
   return (
  
     <View style={styles.container}>

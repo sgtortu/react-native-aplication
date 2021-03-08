@@ -4,27 +4,26 @@ import { StyleSheet, Button, Text, View, TextInput, ScrollView, TouchableHighlig
 import { globalStyles } from './styles/global'; 
 import { AuthContext } from "./utils";
 import AsyncStorage from '@react-native-async-storage/async-storage';  
-import { API_URL } from "../config";
-import { useEffect } from 'react/cjs/react.development';
+import { API_URL } from "../config"; 
 
 export default function Login({ route, navigation }) {  
-  
+  //console.log('---> ',API_URL)
   const { signIn } = React.useContext(AuthContext);
    
   const storeData = async (value) => {
     try {
       await AsyncStorage.setItem('veces', value.toString())
-      console.log('Bien AsyncStorage:')
+      //console.log('Bien AsyncStorage:')
 
     } catch (e) {
       // saving error
-      console.log('Error AsyncStorage:')
+      //console.log('Error AsyncStorage:')
     }
   }
   
   const [dataUser, setDataUser] = useState({    
     username: '',
-    password: '',  
+    password: '',      
   }); 
   const [validateUsername, setValidateUsername] = useState(true);
   const [validatePassword, setValidatePassword] = useState(true); 
@@ -46,13 +45,14 @@ export default function Login({ route, navigation }) {
       
       setValidateAll({ state:true, msg:false})    
 
-      fetch(`http://192.168.0.7:3000/login/${username}/${password}`).then(response => {
+      fetch(`http://64.225.47.18:8080/login/${username}/${password}`).then(response => {
         const contentType = response.headers.get('content-type'); 
         return response.json();
       })
       .then(data => { 
-        console.log('data-   ',data)
+        //console.log('data-   ',data)
         if(data.response.length === 1) {
+
           setValidateAll({ state:false, msg:data.response[0]})      
         } else { 
           signIn(data.response[1][0])

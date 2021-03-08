@@ -78,8 +78,7 @@ export const globalStyles = StyleSheet.create({
       paddingBottom: 5,
       alignSelf: "center",
       borderColor: "#ccc",
-      borderBottomWidth: 1,
-      textTransform: 'lowercase'
+      borderBottomWidth: 1, 
     }, 
     separator: {
       marginTop: 15

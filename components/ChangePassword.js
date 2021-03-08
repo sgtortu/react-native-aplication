@@ -1,13 +1,14 @@
  
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';  
+import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';  
 import { globalStyles } from './styles/global'; 
 import { API_URL } from "../config";
 
 export default function changePassword ({ route, navigation }) {
 
   const [dataUser, setDataUser] = useState({  
-    email: '' 
+    email: ''  
+    //email: 's.tortu@itecriocuarto.org.ar'  
   });
   const { email } = dataUser;
   const [validateEmail, setValidateEmail] = useState({  state: true, msg: "" }); 
@@ -30,7 +31,7 @@ export default function changePassword ({ route, navigation }) {
     }  
           
     // Post send-email
-    fetch(`${API_URL}send-email`, {
+    fetch(`http://64.225.47.18:8080/send-email`, {
       method: 'POST', // or 'PUT'
       headers: {
         'Content-Type': 'application/json',
@@ -39,16 +40,22 @@ export default function changePassword ({ route, navigation }) {
     })
     .then(response => response.json())
     .then(data => {
-
+      //console.log('....?',data.response)
       if(data.response){
-        // ok
-        alert('Enviado. Revise su email.')
-        navigation.navigate('Ingresar')
+        // ok 
+        Alert.alert(
+          "Enviado correctamente.",
+          "Enviamos su nueva contraseña a su email."  
+        ); 
+        navigation.navigate('Login')
         
       } else {
         // error
-        setDisabled(false)
-
+        Alert.alert(
+          "Email no encontrado",
+          "Ingrese el email que utilizó para registrarse."  
+        ); 
+        setDisabled(false);
       }
       
     })          

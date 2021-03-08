@@ -18,12 +18,12 @@ export default function Credencial ({route, navigation}) {
   const [imgPdf417, setimgPdf417] = useState(false); 
    
   React.useEffect(() => { 
-    fetch(`${API_URL}pdf417/${documentoPersona}`).then(response => {
+    fetch(`http://64.225.47.18:8080/pdf417/${documentoPersona}`).then(response => {
       const contentType = response.headers.get('content-type'); 
       return response.json();
     })
     .then(data => { 
-        console.log('ok------> ',data.response[0]); 
+        //console.log('ok------> ',data.response[0]); 
         setimgPdf417(data.response[0]);
     })
     .catch(error => console.error(error),  
@@ -50,12 +50,12 @@ export default function Credencial ({route, navigation}) {
   let paddingPercent = (windowWidth / 100) * 11;
   let paddingTextPercent = (windowWidth / 100) * 2;
 
-  // console.log('----: ' );
+  // //console.log('----: ' );
 
-  console.log(`W = ${windowWidth} - ${widthPercent}%`) 
-  console.log(`H = ${windowHeight} - ${heightPercent}%`)  
-  console.log(`paddingPercent = ${paddingPercent}%`)  
-  console.log(`paddingTextPercent = ${paddingTextPercent}%`)  
+  //console.log(`W = ${windowWidth} - ${widthPercent}%`) 
+  //console.log(`H = ${windowHeight} - ${heightPercent}%`)  
+  //console.log(`paddingPercent = ${paddingPercent}%`)  
+  //console.log(`paddingTextPercent = ${paddingTextPercent}%`)  
 
   
   /*

@@ -1,11 +1,10 @@
  
 import React, { useState } from 'react';
-import { StyleSheet, Button, Text, View, TextInput, ScrollView } from 'react-native';  
+import { StyleSheet, Button, Text, View, TextInput, ScrollView, Alert } from 'react-native';  
 import { globalStyles } from '../styles/global';
 import { API_URL } from "../../config";
 
-export default function Register ({ route, navigation }) { 
-
+export default function Register ({ route, navigation }) {  
     // Desde Scanner.js vienen las siguientes variables: 
     const { idpersona, parentesco, sexoScan, fnacScan, nombreScan, apellidoScan, dniScan, cuilScan } = route.params;
  
@@ -15,7 +14,7 @@ export default function Register ({ route, navigation }) {
         cellphone: '',
         username: '',
         password: '', 
-        passwordRepeat: '', 
+        passwordRepeat: '',  
       }); 
       
       // Estado de los ids  
@@ -59,6 +58,8 @@ export default function Register ({ route, navigation }) {
         setValidateAll({ state:false, msg:"Debe completar todos los campos."});
         setDisabled(false)
         return null;      
+      } else {
+        setValidateAll({ state:true, msg:""});
       }
 
 
@@ -71,6 +72,7 @@ export default function Register ({ route, navigation }) {
       if(reg.test(email) === false) { 
         // Ivalido 
         setValidateEmail({ msg: "Email inválido", state: false })  
+        setDisabled(false)
         return null;
 
 
@@ -90,16 +92,17 @@ export default function Register ({ route, navigation }) {
       let regCellphone = /^-{0,1}\d*\.{0,1}\d+$/ ;
       if(regCellphone.test(cellphone) === false) { 
         // Ivalido
-        setValidateCellphone({ msg: "Celular inválido", state: false }) 
+        setValidateCellphone({ msg: "Celular inválido.", state: false }) 
+        setDisabled(false)
         return null;
-
       } else { 
         // Valido  
         if (cellphone.length > 5) { 
           setValidateCellphone({ msg: false, state: true }) 
         }else{
           // inválido
-          setValidateCellphone({ msg: "Celular inválido", state: false }) 
+          setValidateCellphone({ msg: "Demasiado corto. Ingrese un número válido", state: false }) 
+          setDisabled(false)
           return null;
 
         }
@@ -111,18 +114,18 @@ export default function Register ({ route, navigation }) {
       
       
       // USERNAME
-      let regUsername = /^[\w\.@]{6,100}$/;
+      let regUsername = /^[\w\.@]{5,100}$/;
       if(regUsername.test(username) === false) { 
         // Ivalido
           setValidateUsername({
-            msg: "Usuario inválido.",
+            msg: "Nombre de usuario demasiado corto.",
             state: false
           })
-          setDisabled(false)
-        return null;
+          setDisabled(false);
+          return null;
 
       } else { 
-        // Valido              
+        // Valido               
           setValidateUsername({
             msg: false,
             state: true
@@ -139,16 +142,19 @@ export default function Register ({ route, navigation }) {
         let regPassword = /\s/;   // espacios en blanco 
         // si regPassword es TRUE quiere decir la clave esta mal
         if (regPassword.test(password)) { 
-          setValidatePassword({ msg: "Contraseña invalida.", state: false })
+          setValidatePassword({ msg: "Contraseña inválida.", state: false })
+          setDisabled(false)
           return null;
         }
         else if (password.length < 5) { 
           setValidatePassword({ msg: "Contraseña demasiado corta.", state: false })
+          setDisabled(false)
           return null;
         }
         else if (password !== passwordRepeat) {
           // Invalida: passwordRepeat
           setValidatePasswordRepeat({ msg: "Las contraseñas no coinciden.", state: false }) 
+          setDisabled(false)
           return null;
         } 
         else {
@@ -163,11 +169,11 @@ export default function Register ({ route, navigation }) {
   
         
         // TODO 
-        console.log('validateEmail: ', validateEmail.state)
-        console.log('validateCellphone: ', validateCellphone.state)
-        console.log('validateUsername: ', validateUsername.state)
-        console.log('validatePassword: ', validatePassword.state)
-        console.log('validatePasswordRepeat: ', validatePasswordRepeat.state)
+        //console.lo('validateEmail: ', validateEmail.state)
+        //console.lo('validateCellphone: ', validateCellphone.state)
+        //console.lo('validateUsername: ', validateUsername.state)
+        //console.lo('validatePassword: ', validatePassword.state)
+        //console.lo('validatePasswordRepeat: ', validatePasswordRepeat.state)
 
 
 
@@ -193,7 +199,7 @@ export default function Register ({ route, navigation }) {
           setTimeout(() => {
             
             // Post a usuario y Put a persona
-            fetch(`${API_URL}registrar`, {
+            fetch(`http://64.225.47.18:8080/registrar`, {
               method: 'POST', // or 'PUT'
               headers: {
                 'Content-Type': 'application/json',
@@ -202,16 +208,20 @@ export default function Register ({ route, navigation }) {
             })
             .then(response => response.json())
             .then(data => {
-              console.log('Bien:', data.response.insertId);  
-              if (data.response.insertId) {
-                alert("Registrado correctamente.")     
-                navigation.navigate('Login')
+              //console.lo('Bien:', data.response.insertId);  
+              if (data.response.insertId) { 
+                Alert.alert(
+                  "Registrado correctamente.",
+                  "Ya puede ingresar."  
+                );     
+                setDisabled(true);
+                navigation.navigate('Login');
               }  else {
                 setValidateUsername({
-                  msg: data.response,
+                  msg: 'Nombre de usuario existente.',
                   state: false
                 })
-                setDisabled(false)
+                setDisabled(false);
               }
               
               // Redireccionar al Login con los datos de logueo
@@ -250,6 +260,7 @@ export default function Register ({ route, navigation }) {
           {/* Email */}
           <Text style={ globalStyles.h6}>Email</Text>
           <TextInput
+            autoCapitalize='none'
             style={ globalStyles.inputStyle}
             placeholder="Email"
             value={ email}
@@ -298,6 +309,7 @@ export default function Register ({ route, navigation }) {
           {/* Username */}
           <Text style={ globalStyles.h6}>Nombre de usuario</Text>
           <TextInput
+            autoCapitalize='none'
             style={ globalStyles.inputUsername}
             placeholder="Nombre de usuario"
             maxLength={20}
@@ -381,7 +393,7 @@ export default function Register ({ route, navigation }) {
           {/*/ Button register */} 
           <View style={ styles.button }>
 
-            <Button 
+            <Button  
               disabled={disabled}
               color="#043464" 
               onPress={() => { clickSend() }}  

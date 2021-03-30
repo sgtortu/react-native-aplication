@@ -4,7 +4,7 @@
 
 ## Description
 
-Mobile application with react native. It has forms to register and login. Consume an API with fetch
+Mobile application with react native. It has forms to register and login. Consume an API with fetch (https://github.com/sgtortu/nodejs-api.git)
 
 ## Technology used
 
